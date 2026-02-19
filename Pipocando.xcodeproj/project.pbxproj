@@ -1,0 +1,668 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		792664F32F3D0B040024766B /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 792664F22F3D0B040024766B /* Alamofire */; };
+		7926650E2F3E4EE20024766B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7926650D2F3E4EE20024766B /* SnapKit */; };
+		792665142F3E50E10024766B /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 792665132F3E50E10024766B /* Kingfisher */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		792663D52F3CC8E70024766B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 792663B62F3CC8E30024766B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 792663BD2F3CC8E30024766B;
+			remoteInfo = Pipocando;
+		};
+		792663DF2F3CC8E70024766B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 792663B62F3CC8E30024766B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 792663BD2F3CC8E30024766B;
+			remoteInfo = Pipocando;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		792663BE2F3CC8E30024766B /* Pipocando.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pipocando.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		792663D42F3CC8E70024766B /* PipocandoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PipocandoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		792663DE2F3CC8E70024766B /* PipocandoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PipocandoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		792663E62F3CC8E70024766B /* Exceptions for "Pipocando" folder in "Pipocando" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 792663BD2F3CC8E30024766B /* Pipocando */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		792663C02F3CC8E30024766B /* Pipocando */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				792663E62F3CC8E70024766B /* Exceptions for "Pipocando" folder in "Pipocando" target */,
+			);
+			path = Pipocando;
+			sourceTree = "<group>";
+		};
+		792663D72F3CC8E70024766B /* PipocandoTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PipocandoTests;
+			sourceTree = "<group>";
+		};
+		792663E12F3CC8E70024766B /* PipocandoUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = PipocandoUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		792663BB2F3CC8E30024766B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				792665142F3E50E10024766B /* Kingfisher in Frameworks */,
+				792664F32F3D0B040024766B /* Alamofire in Frameworks */,
+				7926650E2F3E4EE20024766B /* SnapKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		792663D12F3CC8E70024766B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		792663DB2F3CC8E70024766B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		792663B52F3CC8E30024766B = {
+			isa = PBXGroup;
+			children = (
+				792663C02F3CC8E30024766B /* Pipocando */,
+				792663D72F3CC8E70024766B /* PipocandoTests */,
+				792663E12F3CC8E70024766B /* PipocandoUITests */,
+				792663BF2F3CC8E30024766B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		792663BF2F3CC8E30024766B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				792663BE2F3CC8E30024766B /* Pipocando.app */,
+				792663D42F3CC8E70024766B /* PipocandoTests.xctest */,
+				792663DE2F3CC8E70024766B /* PipocandoUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		792663BD2F3CC8E30024766B /* Pipocando */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 792663E72F3CC8E70024766B /* Build configuration list for PBXNativeTarget "Pipocando" */;
+			buildPhases = (
+				792663BA2F3CC8E30024766B /* Sources */,
+				792663BB2F3CC8E30024766B /* Frameworks */,
+				792663BC2F3CC8E30024766B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				792663C02F3CC8E30024766B /* Pipocando */,
+			);
+			name = Pipocando;
+			packageProductDependencies = (
+				792664F22F3D0B040024766B /* Alamofire */,
+				7926650D2F3E4EE20024766B /* SnapKit */,
+				792665132F3E50E10024766B /* Kingfisher */,
+			);
+			productName = Pipocando;
+			productReference = 792663BE2F3CC8E30024766B /* Pipocando.app */;
+			productType = "com.apple.product-type.application";
+		};
+		792663D32F3CC8E70024766B /* PipocandoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 792663EC2F3CC8E70024766B /* Build configuration list for PBXNativeTarget "PipocandoTests" */;
+			buildPhases = (
+				792663D02F3CC8E70024766B /* Sources */,
+				792663D12F3CC8E70024766B /* Frameworks */,
+				792663D22F3CC8E70024766B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				792663D62F3CC8E70024766B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				792663D72F3CC8E70024766B /* PipocandoTests */,
+			);
+			name = PipocandoTests;
+			packageProductDependencies = (
+			);
+			productName = PipocandoTests;
+			productReference = 792663D42F3CC8E70024766B /* PipocandoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		792663DD2F3CC8E70024766B /* PipocandoUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 792663EF2F3CC8E70024766B /* Build configuration list for PBXNativeTarget "PipocandoUITests" */;
+			buildPhases = (
+				792663DA2F3CC8E70024766B /* Sources */,
+				792663DB2F3CC8E70024766B /* Frameworks */,
+				792663DC2F3CC8E70024766B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				792663E02F3CC8E70024766B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				792663E12F3CC8E70024766B /* PipocandoUITests */,
+			);
+			name = PipocandoUITests;
+			packageProductDependencies = (
+			);
+			productName = PipocandoUITests;
+			productReference = 792663DE2F3CC8E70024766B /* PipocandoUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		792663B62F3CC8E30024766B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					792663BD2F3CC8E30024766B = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					792663D32F3CC8E70024766B = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 792663BD2F3CC8E30024766B;
+					};
+					792663DD2F3CC8E70024766B = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 792663BD2F3CC8E30024766B;
+					};
+				};
+			};
+			buildConfigurationList = 792663B92F3CC8E30024766B /* Build configuration list for PBXProject "Pipocando" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 792663B52F3CC8E30024766B;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				792664F12F3D0B040024766B /* XCRemoteSwiftPackageReference "Alamofire" */,
+				7926650C2F3E4EE20024766B /* XCRemoteSwiftPackageReference "SnapKit" */,
+				792665122F3E50E10024766B /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 792663BF2F3CC8E30024766B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				792663BD2F3CC8E30024766B /* Pipocando */,
+				792663D32F3CC8E70024766B /* PipocandoTests */,
+				792663DD2F3CC8E70024766B /* PipocandoUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		792663BC2F3CC8E30024766B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		792663D22F3CC8E70024766B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		792663DC2F3CC8E70024766B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		792663BA2F3CC8E30024766B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		792663D02F3CC8E70024766B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		792663DA2F3CC8E70024766B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		792663D62F3CC8E70024766B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 792663BD2F3CC8E30024766B /* Pipocando */;
+			targetProxy = 792663D52F3CC8E70024766B /* PBXContainerItemProxy */;
+		};
+		792663E02F3CC8E70024766B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 792663BD2F3CC8E30024766B /* Pipocando */;
+			targetProxy = 792663DF2F3CC8E70024766B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		792663E82F3CC8E70024766B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X8H927JWHE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Pipocando/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Pipocando;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.produto.Pipocando;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		792663E92F3CC8E70024766B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X8H927JWHE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Pipocando/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Pipocando;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.produto.Pipocando;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		792663EA2F3CC8E70024766B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = X8H927JWHE;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		792663EB2F3CC8E70024766B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = X8H927JWHE;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		792663ED2F3CC8E70024766B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X8H927JWHE;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.produto.PipocandoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pipocando.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pipocando";
+			};
+			name = Debug;
+		};
+		792663EE2F3CC8E70024766B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X8H927JWHE;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.produto.PipocandoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pipocando.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pipocando";
+			};
+			name = Release;
+		};
+		792663F02F3CC8E70024766B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X8H927JWHE;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.produto.PipocandoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Pipocando;
+			};
+			name = Debug;
+		};
+		792663F12F3CC8E70024766B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X8H927JWHE;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.produto.PipocandoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Pipocando;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		792663B92F3CC8E30024766B /* Build configuration list for PBXProject "Pipocando" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				792663EA2F3CC8E70024766B /* Debug */,
+				792663EB2F3CC8E70024766B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		792663E72F3CC8E70024766B /* Build configuration list for PBXNativeTarget "Pipocando" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				792663E82F3CC8E70024766B /* Debug */,
+				792663E92F3CC8E70024766B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		792663EC2F3CC8E70024766B /* Build configuration list for PBXNativeTarget "PipocandoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				792663ED2F3CC8E70024766B /* Debug */,
+				792663EE2F3CC8E70024766B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		792663EF2F3CC8E70024766B /* Build configuration list for PBXNativeTarget "PipocandoUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				792663F02F3CC8E70024766B /* Debug */,
+				792663F12F3CC8E70024766B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		792664F12F3D0B040024766B /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.11.1;
+			};
+		};
+		7926650C2F3E4EE20024766B /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		792665122F3E50E10024766B /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.6.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		792664F22F3D0B040024766B /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 792664F12F3D0B040024766B /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		7926650D2F3E4EE20024766B /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7926650C2F3E4EE20024766B /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		792665132F3E50E10024766B /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 792665122F3E50E10024766B /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 792663B62F3CC8E30024766B /* Project object */;
+}
