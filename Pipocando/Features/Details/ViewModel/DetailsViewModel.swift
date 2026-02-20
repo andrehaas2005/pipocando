@@ -42,6 +42,7 @@ class DetailsViewModel {
       switch result {
       case .success(let details):
         self?.screenState.value = .success(details)
+        self?.metadata(details)
         self?.cast.value = details.credits?.cast
       case .failure(let error):
         self?.screenState.value = .fails(error.localizedDescription)
@@ -58,8 +59,6 @@ class DetailsViewModel {
         imageUrl.value = URL(string: imageURL  + movie.posterPath)
       }
       // Example metadata: "2024 • 2h 46m • Ficção Científica, Ação"
-      let year = movie.releaseDate.prefix(4)
-      metadata.value = "\(year) • 2h 46m • Ficção Científica, Ação"
       fetchDataMovie(movie)
     case .serie(let serie):
       title.value = serie.name
@@ -72,6 +71,29 @@ class DetailsViewModel {
       imageUrl.value = actor.name.isEmpty ? nil : URL(string: "https://image.tmdb.org/t/p/w500/\(actor.profilePath)")
     }
   }
+  
+  private func metadata(_ detail: MovieDetails) {
+    let year = detail.releaseDate.prefix(4)
+    var genres = ""
+    
+    detail.genres.forEach { genre in
+      genres += " \(genre.name)"
+    }
+    let tempo = formatDuration(minutes: detail.runtime)
+    metadata.value = "\(year) • \(tempo) • \(genres)"
+  }
+  
+  func formatDuration(minutes: Int) -> String {
+      let hours = minutes / 60
+      let remainingMinutes = minutes % 60
+      
+      if hours > 0 {
+          return "\(hours)h \(remainingMinutes)min"
+      } else {
+          return "\(remainingMinutes)min"
+      }
+  }
+
   
   private func setupMockContent() {
     providers.value = [
