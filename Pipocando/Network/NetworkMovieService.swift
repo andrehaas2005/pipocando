@@ -27,25 +27,32 @@ final class NetworkMovieService: NetworkServiceProtocol {
     
     let url = baseUrl + request.path.path()
     
-    let paramenters: Parameters = [ "language": "pt-BR",
-                                    "region": "BR",
-                                    "page": "1"]
-    
     let headers: HTTPHeaders = [ "Accept" : "application/json",
                                  "Authorization" : "Bearer \(apiKey)"]
     
+    
     return try await withCheckedThrowingContinuation { continuation in
+      
       session.request(url,
-                      method: .get,
-                      parameters: paramenters,
+                      method: request.method,
+                      parameters: request.paramenters,
                       encoding: URLEncoding.default,
                       headers: headers)
       .validate(statusCode: 200..<300)
       .responseDecodable(of: T.self) { response in
+        
         switch response.result {
         case .success(let value):
           continuation.resume(returning: value)
         case .failure(let error):
+          print("""
+              🔴 ===============================
+              🔴 ERROR
+              🔴 CODE: \(String(describing: error.destinationURL?.absoluteString))
+              🔴 DOMAIN: \(String(describing: error.responseCode))
+              🔴 DESCRIPTION: \(error.localizedDescription)
+              🔴 ===============================
+              """)
           continuation.resume(throwing: error)
         }
       }

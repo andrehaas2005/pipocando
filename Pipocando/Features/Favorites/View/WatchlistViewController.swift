@@ -99,24 +99,24 @@ class WatchlistViewController: UIViewController {
     private func setupNavigation() {
         title = "Pipocando"
         navigationController?.navigationBar.prefersLargeTitles = false
-//      let appearance = UINavigationBarAppearance()
-//      appearance.configureWithTransparentBackground()
-//      appearance.backgroundColor = Color.backgroundDark.withAlphaComponent(0.8)
-//      appearance.backgroundEffect = UIBlurEffect(style: .dark)
-//      appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-//
-//      navigationController?.navigationBar.standardAppearance = appearance
-//      navigationController?.navigationBar.scrollEdgeAppearance = appearance
+      let appearance = UINavigationBarAppearance()
+      appearance.configureWithTransparentBackground()
+      appearance.backgroundColor = Color.backgroundDark.withAlphaComponent(0.8)
+      appearance.backgroundEffect = UIBlurEffect(style: .dark)
+      appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
 
-//        if #available(iOS 13.0, *) {
-//            let searchItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: nil, action: nil)
-//            let profileItem = UIBarButtonItem(image: UIImage(systemName: "person.circle"), style: .plain, target: nil, action: nil)
-//            navigationItem.rightBarButtonItems = [profileItem, searchItem]
-//
-//            let logoItem = UIBarButtonItem(image: UIImage(systemName: "movieclapper"), style: .plain, target: nil, action: nil)
-//            logoItem.tintColor = Color.primary
-//            navigationItem.leftBarButtonItem = logoItem
-//        }
+      navigationController?.navigationBar.standardAppearance = appearance
+      navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
+        if #available(iOS 13.0, *) {
+            let searchItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: nil, action: nil)
+            let profileItem = UIBarButtonItem(image: UIImage(systemName: "person.circle"), style: .plain, target: nil, action: nil)
+            navigationItem.rightBarButtonItems = [profileItem, searchItem]
+
+            let logoItem = UIBarButtonItem(image: UIImage(systemName: "movieclapper"), style: .plain, target: nil, action: nil)
+            logoItem.tintColor = Color.primary
+            navigationItem.leftBarButtonItem = logoItem
+        }
     }
 
     private func setupUI() {

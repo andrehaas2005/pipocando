@@ -96,7 +96,7 @@ class ActorsCell: UICollectionViewCell, CollectionViewCellProtocol {
     func resetCell() {
         nameLabel.text = nil
         fantasiaName.text = nil
-        posterImage.kf.cancelDownloadTask() // Cancela download pendente
+        posterImage.kf.cancelDownloadTask()
         posterImage.image = UIImage(named: "movie-placeholder") // Volta para placeholder
     }
     func cellBuilder(items: (poster: String?, name: String?, fantasiaNameText: String?)) {

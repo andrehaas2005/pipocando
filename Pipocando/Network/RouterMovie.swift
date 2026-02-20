@@ -11,6 +11,7 @@ public enum RouterMovie {
   case nowPlaying
   case popular
   case upcoming
+  case details(Int)
   
   func path() -> String {
     switch self {
@@ -22,6 +23,8 @@ public enum RouterMovie {
       Configuration.Endpoints.Movies.popular
     case .upcoming:
       Configuration.Endpoints.Movies.upcoming
+    case .details(let movie_id):
+      Configuration.Endpoints.Movies.movie + "\(movie_id)"
     }
   }
 }

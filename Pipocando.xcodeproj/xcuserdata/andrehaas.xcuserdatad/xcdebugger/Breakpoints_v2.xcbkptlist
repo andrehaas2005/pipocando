@@ -7,16 +7,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "238398CF-257C-4CF9-97DF-9E991C717797"
+            uuid = "B9E36DFD-7BBD-440C-A899-C4109A6522C1"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pipocando/Features/Calendar/ViewModel/CalendarViewModel.swift"
+            filePath = "Pipocando/Features/Details/ViewModel/DetailsViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "fetchData()"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
+            landmarkName = "fetchDataMovie(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "228A86EC-114B-44FD-976F-DB65D99BA053"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pipocando/Features/Details/View/DetailsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "402"
+            endingLineNumber = "402"
+            landmarkName = "openYoutube()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

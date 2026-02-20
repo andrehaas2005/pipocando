@@ -11,6 +11,7 @@ import SnapKit
 final class HomeViewController: UIViewController {
   
   private let viewModel: HomeViewModel
+  weak var delegate: (any HomeViewControllerDelegate)?
   
   private let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
@@ -64,11 +65,34 @@ final class HomeViewController: UIViewController {
     viewModel.fetchData()
     posterMovies.viewModel.fetchData()
     carrosselMoviesLancamento.viewModel.fetchData()
+    posterMovies.delegate = self.delegate
   }
   
   private func setupTheme(){
     view.backgroundColor = Color.backgroundDark
+
+    let appearance = UINavigationBarAppearance()
+    appearance.configureWithTransparentBackground()
+    appearance.backgroundColor = Color.backgroundDark.withAlphaComponent(0.8)
+    appearance.backgroundEffect = UIBlurEffect(style: .dark)
+    appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+
+    navigationController?.navigationBar.standardAppearance = appearance
+    navigationController?.navigationBar.scrollEdgeAppearance = appearance
+
     title = "Pipocando"
+
+    if #available(iOS 13.0, *) {
+        let searchItem = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: nil, action: nil)
+        let notifyItem = UIBarButtonItem(image: UIImage(systemName: "bell"), style: .plain, target: nil, action: nil)
+        searchItem.tintColor = .white.withAlphaComponent(0.4)
+        notifyItem.tintColor = .white.withAlphaComponent(0.4)
+        navigationItem.rightBarButtonItems = [notifyItem, searchItem]
+
+        let logoItem = UIBarButtonItem(image: UIImage(systemName: "movieclapper"), style: .plain, target: nil, action: nil)
+        logoItem.tintColor = Color.teal
+        navigationItem.leftBarButtonItem = logoItem
+    }
   }
   
   private func setupUI(){
@@ -105,7 +129,7 @@ final class HomeViewController: UIViewController {
     viewModel.screenState.bind {[weak self] state in
       guard let state = state else {return}
       switch state {
-      case .loading(isLoading: let isLoading):
+      case .loading(isLoading: _):
         break
       case .success(let movies):
         self?.updateContinueWatching(movies)

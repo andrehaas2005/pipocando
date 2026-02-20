@@ -28,15 +28,13 @@ final class NetworkSerieService: NetworkSerieServiceProtocol {
     
     let url = baseUrl + request.path.path()
     
-    let paramenters = request.paramenters
-    
     let headers: HTTPHeaders = [ "Accept" : "application/json",
                                  "Authorization" : "Bearer \(apiKey)"]
     
     return try await withCheckedThrowingContinuation { continuation in
       session.request(url,
-                      method: .get,
-                      parameters: paramenters,
+                      method: request.method,
+                      parameters: request.paramenters,
                       encoding: URLEncoding.default,
                       headers: headers)
       .validate(statusCode: 200..<300)

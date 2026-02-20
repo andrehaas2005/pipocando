@@ -35,6 +35,9 @@ public enum Configuration {
       static var upcoming: String {
         return "movie/upcoming"
       }
+      static var movie: String {
+        return "movie/"
+      }
     }
     public enum Series {
       static var airingToday: String {
@@ -49,7 +52,9 @@ public enum Configuration {
       static var topRated: String {
         return "tv/top_rated"
       }
-      case details(seriesId: Int)
+      static var tv: String {
+        return "tv/"
+      }
     }
   }
 }

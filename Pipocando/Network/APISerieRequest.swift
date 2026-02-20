@@ -9,13 +9,16 @@ import Alamofire
 
 public struct APISerieRequest {
   let path: RouterSerie
-  let method: HTTPMethod
+  var method: HTTPMethod {
+    get {
+      APISerieRequest.defaultMethod(for: path)
+    }
+  }
   let body: Data?
   var paramenters: Parameters
   
-  public init(path: RouterSerie, method: HTTPMethod, body: Data? = nil, paramenters: Parameters = Parameters() ) {
+  public init(path: RouterSerie, body: Data? = nil, paramenters: Parameters = Parameters() ) {
     self.path = path
-    self.method = method
     self.body = body
     self.paramenters = APISerieRequest.defaultParameters(for: path).merging(paramenters) { (_, new) in new }
   }
@@ -29,7 +32,16 @@ public struct APISerieRequest {
     
     case .popular, .topRated:
      break
+    case .details:
+      base["append_to_response"] = ""
     }
     return base
+  }
+  
+  private static func defaultMethod(for path: RouterSerie) -> HTTPMethod {
+    switch path {
+    case .airingToday, .onTheAir, .popular, .topRated, .details:
+      return .get
+    }
   }
 }

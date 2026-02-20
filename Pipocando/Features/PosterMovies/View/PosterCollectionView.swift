@@ -11,7 +11,8 @@ import SnapKit
 
 class PosterCollectionView: UIView {
   
-  var viewModel: any MovieViewModelProtocol
+  let viewModel: any MovieViewModelProtocol
+  weak var delegate: (any HomeViewControllerDelegate)?
   private(set) var listMovies: [Movie] = []
   let posterCollection: UICollectionView = {
     let collectionViewLayout = UICollectionViewFlowLayout()
@@ -30,7 +31,6 @@ class PosterCollectionView: UIView {
     insertService()
     setupCollectionView()
     setupBindings()
-//    viewModel.fetchData()
   }
   
   required init?(coder: NSCoder) {
@@ -109,5 +109,11 @@ extension PosterCollectionView: UICollectionViewDelegateFlowLayout {
 }
 
 extension PosterCollectionView: UICollectionViewDelegate {
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    
+    let movieSelected = listMovies[indexPath.row]
+    print("🎦 movie_id: \(movieSelected.id) - \(movieSelected.title)")
+    delegate?.didSelectMovie(movieSelected)
+  }
   
 }
