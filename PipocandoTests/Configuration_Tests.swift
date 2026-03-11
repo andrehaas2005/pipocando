@@ -11,24 +11,28 @@ import XCTest
 final class Configuration_Tests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        setenv("BASE_URL", "https://example.base.url", 1)
+        setenv("API_KEY", "test_api_key", 1)
+        setenv("IMAGE_BASE_URL", "https://example.image.url", 1)
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        unsetenv("BASE_URL")
+        unsetenv("API_KEY")
+        unsetenv("IMAGE_BASE_URL")
     }
 
-    func returnEnumString() throws {
-     XCTAssertNotNil(Configuration.apiKey)
-      XCTAssertNotNil(Configuration.baseAPIURL)
-      XCTAssertNotNil(Configuration.imageBaseURL) 
+    func testEnvironmentFallbackValuesAreAvailable() throws {
+        XCTAssertNotNil(Configuration.apiKey)
+        XCTAssertNotNil(Configuration.baseAPIURL)
+        XCTAssertNotNil(Configuration.imageBaseURL)
+        XCTAssertEqual(Configuration.apiKey, "test_api_key")
+        XCTAssertEqual(Configuration.baseAPIURL, "https://example.base.url")
+        XCTAssertEqual(Configuration.imageBaseURL, "https://example.image.url")
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    func testGenresEndpointIsNotEmpty() {
+        XCTAssertFalse(Configuration.Endpoints.genres.isEmpty)
+        XCTAssertEqual(Configuration.Endpoints.genres, "genre/movie/list")
     }
-
 }
