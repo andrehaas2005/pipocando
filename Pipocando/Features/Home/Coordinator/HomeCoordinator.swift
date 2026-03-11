@@ -23,7 +23,9 @@ class HomeCoordinator: Coordinator {
   }
 
   func start() {
-    let homeViewModel = HomeViewModel(service: movieService)
+    let repository = MoviesRepositoryImpl(movieService: movieService)
+    let useCase = DefaultFetchNowPlayingMoviesUseCase(repository: repository)
+    let homeViewModel = HomeViewModel(fetchNowPlayingMoviesUseCase: useCase)
     let posterViewModel = PosterViewModel(movieService: movieService)
     let carrosselViewModel = CarrosselViewModel(movieService: movieService)
 
@@ -38,7 +40,7 @@ class HomeCoordinator: Coordinator {
     navigationController.setViewControllers([homeViewController], animated: true)
   }
 
-  private func showMovieDetails(_ movie: Movie) {
+  func showMovieDetails(_ movie: Movie) {
     let detailsCoordinator = DetailsCoordinator(
       navigationController: navigationController,
       movieService: movieService
@@ -60,3 +62,6 @@ extension HomeCoordinator: HomeViewControllerDelegate {
 
   func didRequestLogout() {}
 }
+
+
+extension HomeCoordinator: HomeRouting {}

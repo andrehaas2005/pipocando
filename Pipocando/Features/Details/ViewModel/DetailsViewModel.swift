@@ -33,7 +33,7 @@ class DetailsViewModel {
   
   init(
     detailType: DetailType,
-    movieService: any MovieServiceProtocol = MovieService.shared
+    movieService: any MovieServiceProtocol
   ) {
     self.detailType = detailType
     self.movieService = movieService

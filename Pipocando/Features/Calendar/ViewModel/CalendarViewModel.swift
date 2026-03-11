@@ -19,7 +19,7 @@ class CalendarViewModel {
   var releases: Observable<SerieState> = Observable(.loading(false))
   var service: any SerieServiceProtocol
   
-  init(coordinator: CalendarCoordinator, service: any SerieServiceProtocol = SerieService.shared) {
+  init(coordinator: CalendarCoordinator, service: any SerieServiceProtocol) {
     self.coordinator = coordinator
     self.service = service
     fetchData()
