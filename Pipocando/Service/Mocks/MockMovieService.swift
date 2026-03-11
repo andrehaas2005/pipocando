@@ -49,10 +49,10 @@ class MockMovieService: MovieServiceProtocol {
       completion(.success(result))
     }
   }
-
-  private func getMockData(completion: @escaping ([Movie]) -> Void) {
-    DispatchQueue(label: "Mock").asyncAfter(deadline: .now() + 1.1) {
+  
+  func getMockData(completion: @escaping ([Movie])-> Void) {
+    DispatchQueue(label: "Mock").asyncAfter(deadline: .now() + 1.1, execute: {
       completion(Utilities.getObject("ListMoviesPopular"))
-    }
+    })
   }
 }
