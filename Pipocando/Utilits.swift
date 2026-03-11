@@ -70,3 +70,5 @@ final public class Utilities {
   }
 }
 
+@available(*, deprecated, renamed: "Utilities")
+public typealias Utilits = Utilities
