@@ -32,7 +32,7 @@ final class HomeViewController: UIViewController {
     return poster
   }()
   
-  private let continueWatchingLabel = Utilits.createSectionLabel("CONTINUAR ASSISTINDO")
+  private let continueWatchingLabel = Utilities.createSectionLabel("CONTINUAR ASSISTINDO")
   private let continueWatchingStackView: UIStackView = {
     let stack = UIStackView()
     stack.axis = .vertical
@@ -40,7 +40,7 @@ final class HomeViewController: UIViewController {
     return stack
   }()
   
-  private let trendingLabel = Utilits.createSectionLabel("TENDÊNCIAS DA SEMANA")
+  private let trendingLabel = Utilities.createSectionLabel("TENDÊNCIAS DA SEMANA")
   
   private let carrosselMoviesLancamento: CarrosselCollectionView = {
     let carrossel = CarrosselCollectionView(viewModel: CarrosselViewModel())
@@ -115,10 +115,10 @@ final class HomeViewController: UIViewController {
     posterMovies.snp.makeConstraints { make in
       make.height.equalTo(view.snp.width).multipliedBy(1.25)
     }
-    let continueSection = Utilits.createSectionStack(label: continueWatchingLabel, content: continueWatchingStackView)
+    let continueSection = Utilities.createSectionStack(label: continueWatchingLabel, content: continueWatchingStackView)
     mainStackView.addArrangedSubview(continueSection)
     
-    let trendingSection = Utilits.createSectionStack(label: trendingLabel, content: carrosselMoviesLancamento)
+    let trendingSection = Utilities.createSectionStack(label: trendingLabel, content: carrosselMoviesLancamento)
     mainStackView.addArrangedSubview(trendingSection)
     carrosselMoviesLancamento.snp.makeConstraints { make in
       make.height.equalTo(300)
