@@ -15,6 +15,7 @@ enum StateMovieDetails {
 
 class DetailsViewModel {
   let detailType: DetailType
+  private let movieService: any MovieServiceProtocol
   let title = Observable<String?>(nil)
   let description = Observable<String?>(nil)
   let imageUrl = Observable<URL?>(nil)
@@ -30,15 +31,18 @@ class DetailsViewModel {
   
   weak var coordinator: DetailsCoordinator?
   
-  init(detailType: DetailType) {
+  init(
+    detailType: DetailType,
+    movieService: any MovieServiceProtocol = MovieService.shared
+  ) {
     self.detailType = detailType
+    self.movieService = movieService
     setupDetails(for: detailType)
     setupMockContent()
   }
   
   func fetchDataMovie(_ movie: Movie) {
-    let service = MovieService.shared
-    service.fetchMovieDetails(movie.id) { [weak self] result in
+    movieService.fetchMovieDetails(movie.id) { [weak self] result in
       switch result {
       case .success(let details):
         self?.screenState.value = .success(details)

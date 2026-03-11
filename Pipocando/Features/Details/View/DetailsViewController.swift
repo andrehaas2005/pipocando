@@ -311,8 +311,6 @@ class DetailsViewController: UIViewController {
     setupRatingView()
     setupProgressView()
     setupTrailerView()
-    setupRatingView()
-    setupProgressView()
   }
   
   private func setupProgressView() {

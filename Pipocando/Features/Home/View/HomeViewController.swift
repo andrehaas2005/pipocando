@@ -27,10 +27,7 @@ final class HomeViewController: UIViewController {
     return stackView
   }()
   
-  private let posterMovies: PosterCollectionView = {
-    let poster = PosterCollectionView(viewModel: PosterViewModel())
-    return poster
-  }()
+  private let posterMovies: PosterCollectionView
   
   private let continueWatchingLabel = Utilities.createSectionLabel("CONTINUAR ASSISTINDO")
   private let continueWatchingStackView: UIStackView = {
@@ -42,18 +39,21 @@ final class HomeViewController: UIViewController {
   
   private let trendingLabel = Utilities.createSectionLabel("TENDÊNCIAS DA SEMANA")
   
-  private let carrosselMoviesLancamento: CarrosselCollectionView = {
-    let carrossel = CarrosselCollectionView(viewModel: CarrosselViewModel())
-    return carrossel
-  }()
+  private let carrosselMoviesLancamento: CarrosselCollectionView
   
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
   
-  init(viewModel: HomeViewModel) {
+  init(
+    viewModel: HomeViewModel,
+    posterViewModel: PosterViewModel,
+    carrosselViewModel: CarrosselViewModel
+  ) {
     self.viewModel = viewModel
+    self.posterMovies = PosterCollectionView(viewModel: posterViewModel)
+    self.carrosselMoviesLancamento = CarrosselCollectionView(viewModel: carrosselViewModel)
     super.init(nibName: nil, bundle: nil)
   }
   

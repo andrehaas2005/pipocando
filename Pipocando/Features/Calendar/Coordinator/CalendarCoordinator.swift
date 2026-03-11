@@ -8,16 +8,21 @@
 import UIKit
 
 class CalendarCoordinator: Coordinator {
-    var childCoordinators: [Coordinator] = []
-    var navigationController: NavigationController
+  var childCoordinators: [Coordinator] = []
+  var navigationController: NavigationController
+  private let serieService: any SerieServiceProtocol
 
-    init(navigationController: NavigationController) {
-        self.navigationController = navigationController
-    }
+  init(
+    navigationController: NavigationController,
+    serieService: any SerieServiceProtocol = SerieService.shared
+  ) {
+    self.navigationController = navigationController
+    self.serieService = serieService
+  }
 
-    func start() {
-        let viewModel = CalendarViewModel(coordinator: self)
-        let viewController = CalendarViewController(viewModel: viewModel)
-        navigationController.pushViewController(viewController, animated: true)
-    }
+  func start() {
+    let viewModel = CalendarViewModel(coordinator: self, service: serieService)
+    let viewController = CalendarViewController(viewModel: viewModel)
+    navigationController.pushViewController(viewController, animated: true)
+  }
 }

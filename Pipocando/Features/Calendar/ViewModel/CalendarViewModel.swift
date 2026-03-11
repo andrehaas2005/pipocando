@@ -17,9 +17,9 @@ class CalendarViewModel {
   // swiftlint:disable large_tuple
   var dates: Observable<[(day: String, date: String, isSelected: Bool)]> = Observable([])
   var releases: Observable<SerieState> = Observable(.loading(false))
-  var service: SerieService
+  var service: any SerieServiceProtocol
   
-  init(coordinator: CalendarCoordinator, service: SerieService = .shared) {
+  init(coordinator: CalendarCoordinator, service: any SerieServiceProtocol = SerieService.shared) {
     self.coordinator = coordinator
     self.service = service
     fetchData()

@@ -8,37 +8,48 @@
 import UIKit
 
 class HomeCoordinator: Coordinator {
-  var childCoordinators: [any Coordinator] = []
-  
+  var childCoordinators: [Coordinator] = []
   var navigationController: NavigationController
-  
   weak var parentCoordinator: AppCoordinator?
-  
-  
-  
-  init(navigationController: NavigationController){
+
+  private let movieService: any MovieServiceProtocol
+
+  init(
+    navigationController: NavigationController,
+    movieService: any MovieServiceProtocol = MovieService.shared
+  ) {
     self.navigationController = navigationController
+    self.movieService = movieService
   }
-  
+
   func start() {
-    let movieService = MovieService()
     let homeViewModel = HomeViewModel(service: movieService)
-    let homeViewController = HomeViewController(viewModel: homeViewModel)
+    let posterViewModel = PosterViewModel(movieService: movieService)
+    let carrosselViewModel = CarrosselViewModel(movieService: movieService)
+
+    let homeViewController = HomeViewController(
+      viewModel: homeViewModel,
+      posterViewModel: posterViewModel,
+      carrosselViewModel: carrosselViewModel
+    )
+
     homeViewModel.coordinator = self
     homeViewController.delegate = self
     navigationController.setViewControllers([homeViewController], animated: true)
   }
-  
+
   private func showMovieDetails(_ movie: Movie) {
-    // Cria e inicia um DetailsCoordinator para gerenciar o fluxo de detalhes.
-    let detailsCoordinator = DetailsCoordinator(navigationController: navigationController)
-    detailsCoordinator.parentCoordinator = self // Define o HomeCoordinator como pai
-    childCoordinators.append(detailsCoordinator)
+    let detailsCoordinator = DetailsCoordinator(
+      navigationController: navigationController,
+      movieService: movieService
+    )
+    detailsCoordinator.parentCoordinator = self
+    addChild(detailsCoordinator)
     detailsCoordinator.start(with: .movie(movie))
   }
-  
-  func childDidFinish(_ corrd: Coordinator) {
-    
+
+  func childDidFinish(_ coordinator: Coordinator) {
+    removeChild(coordinator)
   }
 }
 
@@ -46,10 +57,6 @@ extension HomeCoordinator: HomeViewControllerDelegate {
   func didSelectMovie(_ movie: Movie) {
     showMovieDetails(movie)
   }
-  
-  func didRequestLogout() {
-    
-  }
-  
-  
+
+  func didRequestLogout() {}
 }
