@@ -48,7 +48,7 @@ class MockMovieService: MovieServiceProtocol {
   
   func getMockData(completion: @escaping ([Movie])-> Void) {
     DispatchQueue(label: "Mock").asyncAfter(deadline: .now() + 1.1, execute: {
-      completion(Utilits.getObject("ListMoviesPopular"))
+      completion(Utilities.getObject("ListMoviesPopular"))
     })
   }
 }

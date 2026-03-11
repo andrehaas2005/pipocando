@@ -32,7 +32,7 @@ class MockSerieService: SerieServiceProtocol {
   
     func fetchLastWatchedSeriesEpisodes(completion: @escaping (Result<[Serie], Error>) -> Void) {
         DispatchQueue(label: "Mock").asyncAfter(deadline: .now() + 1.1, execute: {
-            completion(.success(Utilits.getObject("ListaSeriesPopular")))
+            completion(.success(Utilities.getObject("ListaSeriesPopular")))
         })
     }
 }

@@ -15,15 +15,24 @@ final class MovieService: MovieServiceProtocol {
   public static let shared = MovieService()
 
   func fetchPopularMovies(completion: @escaping (Result<[Movie], any Error>) -> Void) {
-    
+    let request = APIMovieRequest(path: .popular)
+    Task { [weak self] in
+      await self?.fetchWithAsync(request) { completion($0) }
+    }
   }
   
   func fetchTopRatedMovies(completion: @escaping (Result<[Movie], any Error>) -> Void) {
-    
+    let request = APIMovieRequest(path: .topRated)
+    Task { [weak self] in
+      await self?.fetchWithAsync(request) { completion($0) }
+    }
   }
   
   func fetchUpcomingMovies(completion: @escaping (Result<[Movie], any Error>) -> Void) {
-    
+    let request = APIMovieRequest(path: .upcoming)
+    Task { [weak self] in
+      await self?.fetchWithAsync(request) { completion($0) }
+    }
   }
   
   func fetchMovieDetails(_ movie_id: Int, completion: @escaping (Result<MovieDetails, any Error>) -> Void) {

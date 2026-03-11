@@ -28,7 +28,7 @@ public enum Configuration {
   }
   public enum Endpoints {
     static var genres: String {
-      return ""
+      return "genre/movie/list"
     }
     public enum Movies {
       static var topRated: String {
@@ -68,9 +68,16 @@ public enum Configuration {
 }
 
 /*
- https://api.themoviedb.org/3/tv/airing_today
- https://api.themoviedb.org/3/tv/on_the_air
- https://api.themoviedb.org/3/tv/popular
- https://api.themoviedb.org/3/tv/top_rated
- https://api.themoviedb.org/3/tv/{series_id}
+ Endpoints currently mapped in this file:
+ - genre/movie/list
+ - movie/top_rated
+ - movie/now_playing
+ - movie/popular
+ - movie/upcoming
+ - movie/{movie_id}
+ - tv/airing_today
+ - tv/on_the_air
+ - tv/popular
+ - tv/top_rated
+ - tv/{series_id}
  */
