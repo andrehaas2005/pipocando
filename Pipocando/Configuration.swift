@@ -7,16 +7,24 @@
 import Foundation
 
 public enum Configuration {
+  private static let config: NSDictionary? = {
+    if let path = Bundle.main.path(forResource: "Config", ofType: "plist"),
+       let dict = NSDictionary(contentsOfFile: path) {
+      return dict
+    }
+    return nil
+  }()
+  
   static var baseAPIURL: String? {
-    return ProcessInfo.processInfo.environment["BASE_URL"]
+    return config?["URLBase"] as? String ?? ProcessInfo.processInfo.environment["BASE_URL"]
   }
   
   static var apiKey: String? {
-    return ProcessInfo.processInfo.environment["API_KEY"]
+    return config?["APIKey"] as? String ?? ProcessInfo.processInfo.environment["API_KEY"]
   }
   
   static var imageBaseURL: String? {
-    return ProcessInfo.processInfo.environment["IMAGE_BASE_URL"]
+    return config?["URLImageBase"] as? String ?? ProcessInfo.processInfo.environment["IMAGE_BASE_URL"]
   }
   public enum Endpoints {
     static var genres: String {
