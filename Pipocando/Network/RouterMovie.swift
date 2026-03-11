@@ -6,7 +6,7 @@
 //
 
 
-public enum RouterMovie {
+public enum RouterMovie: Equatable {
   case topRated
   case nowPlaying
   case popular
