@@ -54,14 +54,12 @@ class PosterCollectionView: UIView {
   private func setupBindings() {
     viewModel.screenState.bind { state in
       switch state {
-      case .failure(let erro):
+      case .idle, .loading, .error:
         break
-      case .loading(isLoading: let _):
-        break
-      case .success(let movies):
+      case .loaded(let movies):
         self.listMovies = movies
         self.posterCollection.reloadData()
-      default:
+      case .none:
         break
       }
     }

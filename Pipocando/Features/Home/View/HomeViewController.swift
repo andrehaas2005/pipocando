@@ -129,12 +129,10 @@ final class HomeViewController: UIViewController {
     viewModel.screenState.bind {[weak self] state in
       guard let state = state else {return}
       switch state {
-      case .loading(isLoading: _):
+      case .idle, .loading, .error:
         break
-      case .success(let movies):
+      case .loaded(let movies):
         self?.updateContinueWatching(movies)
-      case .failure(_):
-        break
       }
     }
   }

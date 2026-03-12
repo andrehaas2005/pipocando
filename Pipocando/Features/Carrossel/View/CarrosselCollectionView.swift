@@ -57,11 +57,9 @@ class CarrosselCollectionView: UIView {
   private func setupBindings() {
     viewModel.screenState.bind { [weak self] state in
       switch state {
-      case .failure(let _):
+      case .idle, .loading, .error:
         break
-      case .loading(isLoading: let _):
-        break
-      case .success(let movies):
+      case .loaded(let movies):
         self?.listMovies = movies
         self?.carrosselCollection.reloadData()
       case .none:

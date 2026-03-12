@@ -174,9 +174,9 @@ class CalendarViewController: UIViewController {
     viewModel.releases.bind { [weak self] states in
       DispatchQueue.main.async {
         switch states {
-        case .failure: break
-        case .loading: break
-        case .success(let series):
+        case .idle, .loading, .error:
+          break
+        case .loaded(let series):
           self?.listSeries = series
           self?.timelineTableView.reloadData()
           self?.updateTableViewHeight()

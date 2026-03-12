@@ -16,7 +16,7 @@ class HomeCoordinator: Coordinator {
 
   init(
     navigationController: NavigationController,
-    movieService: any MovieServiceProtocol = MovieService.shared
+    movieService: any MovieServiceProtocol
   ) {
     self.navigationController = navigationController
     self.movieService = movieService

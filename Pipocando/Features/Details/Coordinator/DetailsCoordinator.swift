@@ -22,16 +22,18 @@ class DetailsCoordinator: Coordinator {
 
   init(
     navigationController: NavigationController,
-    movieService: any MovieServiceProtocol = MovieService.shared
+    movieService: any MovieServiceProtocol
   ) {
     self.navigationController = navigationController
     self.movieService = movieService
   }
 
   func start(with detailType: DetailType) {
+    let repository = MovieDetailsRepositoryImpl(movieService: movieService)
+    let useCase = DefaultFetchMovieDetailsUseCase(repository: repository)
     let viewModel = DetailsViewModel(
       detailType: detailType,
-      movieService: movieService
+      fetchMovieDetailsUseCase: useCase
     )
     viewModel.coordinator = self
 

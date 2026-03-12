@@ -7,22 +7,24 @@
 import Foundation
 
 class PosterViewModel: MovieViewModelProtocol {
-  
-  var screenState: Observable<MoviePosterState> = .init(.loading(isLoading: false))
-  
-  var movieService: (any MovieServiceProtocol)
-  
-  init(movieService: MovieServiceProtocol = MovieService()) {
+
+  var screenState: Observable<MoviePosterState> = .init(.idle)
+
+  var movieService: any MovieServiceProtocol
+
+  init(movieService: any MovieServiceProtocol = MovieService()) {
     self.movieService = movieService
   }
-  
+
   func fetchData() {
-    movieService.fetchNowPlayingMovies { result in
+    screenState.value = .loading
+
+    movieService.fetchNowPlayingMovies { [weak self] result in
       switch result {
       case .success(let movies):
-        self.screenState.value = .success(movies)
+        self?.screenState.value = .loaded(movies)
       case .failure(let error):
-        self.screenState.value = .failure(error.localizedDescription)
+        self?.screenState.value = .error(AppError.map(error))
       }
     }
   }

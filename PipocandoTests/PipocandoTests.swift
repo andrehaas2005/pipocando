@@ -10,27 +10,91 @@ import XCTest
 
 final class PipocandoTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+  private struct DummyError: Error {}
+
+  private final class FetchNowPlayingUseCaseSpy: FetchNowPlayingMoviesUseCase {
+    var result: Result<[Movie], AppError> = .success([])
+
+    func execute(completion: @escaping (Result<[Movie], AppError>) -> Void) {
+      completion(result)
+    }
+  }
+
+  private func makeMovie(id: Int = 1) -> Movie {
+    Movie(
+      adult: false,
+      backdropPath: "/backdrop.jpg",
+      genreIDS: [1, 2],
+      id: id,
+      originalLanguage: "pt",
+      originalTitle: "Título",
+      overview: "Resumo",
+      popularity: 12.3,
+      posterPath: "/poster.jpg",
+      releaseDate: "2024-01-01",
+      title: "Filme",
+      video: false,
+      voteAverage: 8.0,
+      voteCount: 100
+    )
+  }
+
+  func testAppErrorMapsNetworkMovieErrorsToDomain() {
+    XCTAssertEqual(AppError.map(NetworkMovieError.networkError).userMessage,
+                   AppError.network.userMessage)
+    XCTAssertEqual(AppError.map(NetworkMovieError.notfoundApiKey).userMessage,
+                   AppError.invalidConfiguration.userMessage)
+    XCTAssertEqual(AppError.map(NetworkMovieError.invalidURL).userMessage,
+                   AppError.invalidResponse.userMessage)
+  }
+
+  func testAppErrorMapsUnknownErrorToUnknownMessage() {
+    let mapped = AppError.map(DummyError())
+
+    switch mapped {
+    case .unknown:
+      XCTAssertTrue(true)
+    default:
+      XCTFail("Expected unknown AppError")
+    }
+  }
+
+  func testHomeViewModelEmitsLoadedStateOnUseCaseSuccess() {
+    let spy = FetchNowPlayingUseCaseSpy()
+    spy.result = .success([makeMovie(id: 99)])
+    let sut = HomeViewModel(fetchNowPlayingMoviesUseCase: spy)
+
+    sut.fetchData()
+
+    guard let state = sut.screenState.value else {
+      return XCTFail("Expected a state value")
     }
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    switch state {
+    case .loaded(let movies):
+      XCTAssertEqual(movies.count, 1)
+      XCTAssertEqual(movies.first?.id, 99)
+    default:
+      XCTFail("Expected loaded state")
+    }
+  }
+
+  func testHomeViewModelEmitsErrorStateOnUseCaseFailure() {
+    let spy = FetchNowPlayingUseCaseSpy()
+    spy.result = .failure(.network)
+    let sut = HomeViewModel(fetchNowPlayingMoviesUseCase: spy)
+
+    sut.fetchData()
+
+    guard let state = sut.screenState.value else {
+      return XCTFail("Expected a state value")
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    switch state {
+    case .error(let error):
+      XCTAssertEqual(error.userMessage, AppError.network.userMessage)
+    default:
+      XCTFail("Expected error state")
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
+  }
 }

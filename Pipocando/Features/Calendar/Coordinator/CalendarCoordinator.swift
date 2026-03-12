@@ -14,14 +14,16 @@ class CalendarCoordinator: Coordinator {
 
   init(
     navigationController: NavigationController,
-    serieService: any SerieServiceProtocol = SerieService.shared
+    serieService: any SerieServiceProtocol
   ) {
     self.navigationController = navigationController
     self.serieService = serieService
   }
 
   func start() {
-    let viewModel = CalendarViewModel(coordinator: self, service: serieService)
+    let repository = SeriesRepositoryImpl(serieService: serieService)
+    let useCase = DefaultFetchTopRatedSeriesUseCase(repository: repository)
+    let viewModel = CalendarViewModel(coordinator: self, fetchTopRatedSeriesUseCase: useCase)
     let viewController = CalendarViewController(viewModel: viewModel)
     navigationController.pushViewController(viewController, animated: true)
   }
