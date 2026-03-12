@@ -15,45 +15,6 @@ enum DetailsState {
   case error(AppError)
 }
 
-protocol MovieDetailsRepository {
-  func fetchMovieDetails(_ movieID: Int, completion: @escaping (Result<MovieDetails, AppError>) -> Void)
-}
-
-final class MovieDetailsRepositoryImpl: MovieDetailsRepository {
-  private let movieService: any MovieServiceProtocol
-
-  init(movieService: any MovieServiceProtocol) {
-    self.movieService = movieService
-  }
-
-  func fetchMovieDetails(_ movieID: Int, completion: @escaping (Result<MovieDetails, AppError>) -> Void) {
-    movieService.fetchMovieDetails(movieID) { result in
-      switch result {
-      case .success(let details):
-        completion(.success(details))
-      case .failure(let error):
-        completion(.failure(AppError.map(error)))
-      }
-    }
-  }
-}
-
-protocol FetchMovieDetailsUseCase {
-  func execute(movieID: Int, completion: @escaping (Result<MovieDetails, AppError>) -> Void)
-}
-
-final class DefaultFetchMovieDetailsUseCase: FetchMovieDetailsUseCase {
-  private let repository: any MovieDetailsRepository
-
-  init(repository: any MovieDetailsRepository) {
-    self.repository = repository
-  }
-
-  func execute(movieID: Int, completion: @escaping (Result<MovieDetails, AppError>) -> Void) {
-    repository.fetchMovieDetails(movieID, completion: completion)
-  }
-}
-
 @MainActor
 class DetailsViewModel {
   let detailType: DetailType
