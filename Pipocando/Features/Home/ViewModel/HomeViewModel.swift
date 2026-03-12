@@ -11,45 +11,6 @@ protocol HomeRouting: AnyObject {
   func showMovieDetails(_ movie: Movie)
 }
 
-protocol MoviesRepository {
-  func fetchNowPlayingMovies(completion: @escaping (Result<[Movie], AppError>) -> Void)
-}
-
-final class MoviesRepositoryImpl: MoviesRepository {
-  private let movieService: any MovieServiceProtocol
-
-  init(movieService: any MovieServiceProtocol) {
-    self.movieService = movieService
-  }
-
-  func fetchNowPlayingMovies(completion: @escaping (Result<[Movie], AppError>) -> Void) {
-    movieService.fetchNowPlayingMovies { result in
-      switch result {
-      case .success(let movies):
-        completion(.success(movies))
-      case .failure(let error):
-        completion(.failure(AppError.map(error)))
-      }
-    }
-  }
-}
-
-protocol FetchNowPlayingMoviesUseCase {
-  func execute(completion: @escaping (Result<[Movie], AppError>) -> Void)
-}
-
-final class DefaultFetchNowPlayingMoviesUseCase: FetchNowPlayingMoviesUseCase {
-  private let repository: any MoviesRepository
-
-  init(repository: any MoviesRepository) {
-    self.repository = repository
-  }
-
-  func execute(completion: @escaping (Result<[Movie], AppError>) -> Void) {
-    repository.fetchNowPlayingMovies(completion: completion)
-  }
-}
-
 @MainActor
 class HomeViewModel {
   private let fetchNowPlayingMoviesUseCase: any FetchNowPlayingMoviesUseCase
