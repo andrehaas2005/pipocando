@@ -19,8 +19,8 @@ final class AppDependencyContainer: AppDependencies {
   let serieService: any SerieServiceProtocol
 
   init(
-    movieService: any MovieServiceProtocol = MovieService.shared,
-    serieService: any SerieServiceProtocol = SerieService.shared
+    movieService: any MovieServiceProtocol,
+    serieService: any SerieServiceProtocol
   ) {
     self.movieService = movieService
     self.serieService = serieService
