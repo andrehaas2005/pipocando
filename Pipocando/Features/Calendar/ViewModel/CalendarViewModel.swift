@@ -5,6 +5,8 @@
 
 import Foundation
 
+protocol CalendarRouting: AnyObject {}
+
 enum SerieState {
   case idle
   case loading
@@ -51,15 +53,16 @@ final class DefaultFetchTopRatedSeriesUseCase: FetchTopRatedSeriesUseCase {
   }
 }
 
+@MainActor
 class CalendarViewModel {
-  weak var coordinator: CalendarCoordinator?
+  weak var coordinator: (any CalendarRouting)?
 
   // swiftlint:disable large_tuple
   var dates: Observable<[(day: String, date: String, isSelected: Bool)]> = Observable([])
   var releases: Observable<SerieState> = Observable(.idle)
   private let fetchTopRatedSeriesUseCase: any FetchTopRatedSeriesUseCase
 
-  init(coordinator: CalendarCoordinator, fetchTopRatedSeriesUseCase: any FetchTopRatedSeriesUseCase) {
+  init(coordinator: any CalendarRouting, fetchTopRatedSeriesUseCase: any FetchTopRatedSeriesUseCase) {
     self.coordinator = coordinator
     self.fetchTopRatedSeriesUseCase = fetchTopRatedSeriesUseCase
     fetchData()

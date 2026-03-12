@@ -7,12 +7,13 @@
 
 import Foundation
 
+@MainActor
 class CarrosselViewModel: MovieViewModelProtocol {
 
   var movieService: any MovieServiceProtocol
   var screenState: Observable<MoviePosterState> = .init(.idle)
 
-  init(movieService: any MovieServiceProtocol = MovieService()) {
+  init(movieService: any MovieServiceProtocol) {
     self.movieService = movieService
   }
 

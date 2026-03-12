@@ -50,6 +50,7 @@ final class DefaultFetchNowPlayingMoviesUseCase: FetchNowPlayingMoviesUseCase {
   }
 }
 
+@MainActor
 class HomeViewModel {
   private let fetchNowPlayingMoviesUseCase: any FetchNowPlayingMoviesUseCase
   weak var coordinator: (any HomeRouting)?

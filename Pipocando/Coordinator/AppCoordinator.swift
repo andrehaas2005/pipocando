@@ -55,7 +55,7 @@ class AppCoordinator: Coordinator {
     let homeNavController = NavigationController()
     let homeCoordinator = HomeCoordinator(
       navigationController: homeNavController,
-      movieService: dependencies.movieService
+      dependencies: dependencies
     )
     addChild(homeCoordinator)
     homeCoordinator.start()
@@ -82,7 +82,7 @@ class AppCoordinator: Coordinator {
     let calendarNavController = NavigationController()
     let calendarCoordinator = CalendarCoordinator(
       navigationController: calendarNavController,
-      serieService: dependencies.serieService
+      fetchTopRatedSeriesUseCase: dependencies.makeFetchTopRatedSeriesUseCase()
     )
     addChild(calendarCoordinator)
     calendarCoordinator.start()

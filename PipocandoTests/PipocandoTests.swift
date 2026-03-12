@@ -8,6 +8,7 @@
 import XCTest
 @testable import Pipocando
 
+@MainActor
 final class PipocandoTests: XCTestCase {
 
   private struct DummyError: Error {}

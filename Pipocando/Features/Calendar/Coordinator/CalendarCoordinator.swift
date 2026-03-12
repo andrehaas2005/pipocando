@@ -10,21 +10,22 @@ import UIKit
 class CalendarCoordinator: Coordinator {
   var childCoordinators: [Coordinator] = []
   var navigationController: NavigationController
-  private let serieService: any SerieServiceProtocol
+  private let fetchTopRatedSeriesUseCase: any FetchTopRatedSeriesUseCase
 
   init(
     navigationController: NavigationController,
-    serieService: any SerieServiceProtocol
+    fetchTopRatedSeriesUseCase: any FetchTopRatedSeriesUseCase
   ) {
     self.navigationController = navigationController
-    self.serieService = serieService
+    self.fetchTopRatedSeriesUseCase = fetchTopRatedSeriesUseCase
   }
 
   func start() {
-    let repository = SeriesRepositoryImpl(serieService: serieService)
-    let useCase = DefaultFetchTopRatedSeriesUseCase(repository: repository)
-    let viewModel = CalendarViewModel(coordinator: self, fetchTopRatedSeriesUseCase: useCase)
+    let viewModel = CalendarViewModel(coordinator: self, fetchTopRatedSeriesUseCase: fetchTopRatedSeriesUseCase)
     let viewController = CalendarViewController(viewModel: viewModel)
     navigationController.pushViewController(viewController, animated: true)
   }
 }
+
+
+extension CalendarCoordinator: CalendarRouting {}

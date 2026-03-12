@@ -6,6 +6,8 @@
 import Foundation
 import UIKit
 
+protocol DetailsRouting: AnyObject {}
+
 enum DetailsState {
   case idle
   case loading
@@ -52,6 +54,7 @@ final class DefaultFetchMovieDetailsUseCase: FetchMovieDetailsUseCase {
   }
 }
 
+@MainActor
 class DetailsViewModel {
   let detailType: DetailType
   private let fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase
@@ -68,7 +71,7 @@ class DetailsViewModel {
   let rating = Observable<Double>(4.0)
   let screenState = Observable<DetailsState>(.idle)
 
-  weak var coordinator: DetailsCoordinator?
+  weak var coordinator: (any DetailsRouting)?
 
   init(
     detailType: DetailType,

@@ -6,13 +6,14 @@
 //
 import Foundation
 
+@MainActor
 class PosterViewModel: MovieViewModelProtocol {
 
   var screenState: Observable<MoviePosterState> = .init(.idle)
 
   var movieService: any MovieServiceProtocol
 
-  init(movieService: any MovieServiceProtocol = MovieService()) {
+  init(movieService: any MovieServiceProtocol) {
     self.movieService = movieService
   }
 
