@@ -17,7 +17,7 @@ final public class Utilities {
     leftMargin: CGFloat = 0,
     topMargin: CGFloat = 0,
     bottomMargin: CGFloat = 0,
-    spacing: CGFloat = 8
+    spacing: CGFloat = Spacing.xs
   ) -> UIStackView {
     let stack = UIStackView(arrangedSubviews: [label, content])
     stack.axis = .vertical
@@ -33,7 +33,7 @@ final public class Utilities {
   public static func createSectionLabel(_ title: String) -> UILabel {
     let label = UILabel()
     label.text = title
-    label.font = UIFont.systemFont(ofSize: 10, weight: .bold)
+    label.font = Typography.sectionTitle
     label.textColor = .white.withAlphaComponent(0.9)
     let attributedString = NSMutableAttributedString(string: title)
     attributedString.addAttribute(.kern, value: 1.5, range: NSRange(location: 0, length: title.count))

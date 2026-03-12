@@ -23,7 +23,7 @@ final class HomeViewController: UIViewController {
   private let mainStackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
-    stackView.spacing = 32
+    stackView.spacing = Spacing.xl
     return stackView
   }()
   
@@ -33,7 +33,7 @@ final class HomeViewController: UIViewController {
   private let continueWatchingStackView: UIStackView = {
     let stack = UIStackView()
     stack.axis = .vertical
-    stack.spacing = 12
+    stack.spacing = Spacing.sm
     return stack
   }()
   
@@ -129,12 +129,10 @@ final class HomeViewController: UIViewController {
     viewModel.screenState.bind {[weak self] state in
       guard let state = state else {return}
       switch state {
-      case .loading(isLoading: _):
+      case .idle, .loading, .error:
         break
-      case .success(let movies):
+      case .loaded(let movies):
         self?.updateContinueWatching(movies)
-      case .failure(_):
-        break
       }
     }
   }

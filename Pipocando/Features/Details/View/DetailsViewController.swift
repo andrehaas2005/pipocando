@@ -540,12 +540,10 @@ class DetailsViewController: UIViewController {
     
     viewModel.screenState.bind { [weak self] state in
       switch state {
-      case .success(let movieDetails):
+      case .loaded(let movieDetails):
         self?.detals = movieDetails
         self?.openYoutube()
-      case .fails(let _):
-        break
-      case .loading(let _):
+      case .idle, .loading, .error:
         break
       case nil:
         break

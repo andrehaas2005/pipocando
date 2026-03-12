@@ -24,11 +24,11 @@ class CalendarViewController: UIViewController {
     private let dateSelectorCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 8
+        layout.minimumInteritemSpacing = Spacing.xs
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .clear
         cv.showsHorizontalScrollIndicator = false
-        cv.contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        cv.contentInset = UIEdgeInsets(top: 0, left: Spacing.md, bottom: 0, right: Spacing.md)
         return cv
     }()
 
@@ -92,19 +92,19 @@ class CalendarViewController: UIViewController {
         updateCount.text = "2"
         updateCount.textColor = .white
         updateCount.backgroundColor = Color.primary
-        updateCount.font = UIFont.systemFont(ofSize: 10, weight: .bold)
+        updateCount.font = Typography.sectionTitle
         updateCount.textAlignment = .center
         updateCount.layer.cornerRadius = 10
         updateCount.clipsToBounds = true
 
         let notifHeader = UIStackView(arrangedSubviews: [updateNotifLabel, updateCount])
-        notifHeader.spacing = 8
+        notifHeader.spacing = Spacing.xs
         updateCount.snp.makeConstraints { make in make.width.height.equalTo(20) }
 
         contentView.addSubview(notifHeader)
         notifHeader.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16)
-            make.leading.equalToSuperview().offset(16)
+            make.top.equalToSuperview().offset(Spacing.md)
+            make.leading.equalToSuperview().offset(Spacing.md)
         }
 
         let notifCard = UIView()
@@ -115,8 +115,8 @@ class CalendarViewController: UIViewController {
 
         contentView.addSubview(notifCard)
         notifCard.snp.makeConstraints { make in
-            make.top.equalTo(notifHeader.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(16)
+            make.top.equalTo(notifHeader.snp.bottom).offset(Spacing.md)
+            make.leading.trailing.equalToSuperview().inset(Spacing.md)
             make.height.equalTo(80)
         }
 
@@ -142,7 +142,7 @@ class CalendarViewController: UIViewController {
 
         todayHeader.snp.makeConstraints { make in
             make.top.equalTo(dateSelectorCollectionView.snp.bottom).offset(24)
-            make.leading.equalToSuperview().offset(16)
+            make.leading.equalToSuperview().offset(Spacing.md)
         }
 
         todayDate.snp.makeConstraints { make in
@@ -174,9 +174,9 @@ class CalendarViewController: UIViewController {
     viewModel.releases.bind { [weak self] states in
       DispatchQueue.main.async {
         switch states {
-        case .failure: break
-        case .loading: break
-        case .success(let series):
+        case .idle, .loading, .error:
+          break
+        case .loaded(let series):
           self?.listSeries = series
           self?.timelineTableView.reloadData()
           self?.updateTableViewHeight()
@@ -194,7 +194,7 @@ class CalendarViewController: UIViewController {
     private func createSectionLabel(_ title: String) -> UILabel {
         let label = UILabel()
         label.text = title
-        label.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+        label.font = Typography.captionStrong
         label.textColor = Color.primary
         return label
     }

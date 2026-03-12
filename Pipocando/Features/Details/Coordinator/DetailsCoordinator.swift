@@ -18,20 +18,20 @@ class DetailsCoordinator: Coordinator {
   var childCoordinators: [Coordinator] = []
   var navigationController: NavigationController
 
-  private let movieService: any MovieServiceProtocol
+  private let fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase
 
   init(
     navigationController: NavigationController,
-    movieService: any MovieServiceProtocol = MovieService.shared
+    fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase
   ) {
     self.navigationController = navigationController
-    self.movieService = movieService
+    self.fetchMovieDetailsUseCase = fetchMovieDetailsUseCase
   }
 
   func start(with detailType: DetailType) {
     let viewModel = DetailsViewModel(
       detailType: detailType,
-      movieService: movieService
+      fetchMovieDetailsUseCase: fetchMovieDetailsUseCase
     )
     viewModel.coordinator = self
 
@@ -45,3 +45,6 @@ class DetailsCoordinator: Coordinator {
 
   func start() {}
 }
+
+
+extension DetailsCoordinator: DetailsRouting {}

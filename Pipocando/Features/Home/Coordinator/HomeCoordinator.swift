@@ -12,20 +12,20 @@ class HomeCoordinator: Coordinator {
   var navigationController: NavigationController
   weak var parentCoordinator: AppCoordinator?
 
-  private let movieService: any MovieServiceProtocol
+  private let dependencies: AppDependencies
 
   init(
     navigationController: NavigationController,
-    movieService: any MovieServiceProtocol = MovieService.shared
+    dependencies: AppDependencies
   ) {
     self.navigationController = navigationController
-    self.movieService = movieService
+    self.dependencies = dependencies
   }
 
   func start() {
-    let homeViewModel = HomeViewModel(service: movieService)
-    let posterViewModel = PosterViewModel(movieService: movieService)
-    let carrosselViewModel = CarrosselViewModel(movieService: movieService)
+    let homeViewModel = HomeViewModel(fetchNowPlayingMoviesUseCase: dependencies.makeFetchNowPlayingMoviesUseCase())
+    let posterViewModel = PosterViewModel(movieService: dependencies.movieService)
+    let carrosselViewModel = CarrosselViewModel(movieService: dependencies.movieService)
 
     let homeViewController = HomeViewController(
       viewModel: homeViewModel,
@@ -38,10 +38,10 @@ class HomeCoordinator: Coordinator {
     navigationController.setViewControllers([homeViewController], animated: true)
   }
 
-  private func showMovieDetails(_ movie: Movie) {
+  func showMovieDetails(_ movie: Movie) {
     let detailsCoordinator = DetailsCoordinator(
       navigationController: navigationController,
-      movieService: movieService
+      fetchMovieDetailsUseCase: dependencies.makeFetchMovieDetailsUseCase()
     )
     detailsCoordinator.parentCoordinator = self
     addChild(detailsCoordinator)
@@ -60,3 +60,6 @@ extension HomeCoordinator: HomeViewControllerDelegate {
 
   func didRequestLogout() {}
 }
+
+
+extension HomeCoordinator: HomeRouting {}

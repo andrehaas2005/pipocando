@@ -6,54 +6,97 @@
 import Foundation
 import UIKit
 
-enum StateMovieDetails {
-  case success(MovieDetails)
-  case fails(String)
-  case loading(Bool)
+protocol DetailsRouting: AnyObject {}
+
+enum DetailsState {
+  case idle
+  case loading
+  case loaded(MovieDetails)
+  case error(AppError)
 }
 
+protocol MovieDetailsRepository {
+  func fetchMovieDetails(_ movieID: Int, completion: @escaping (Result<MovieDetails, AppError>) -> Void)
+}
 
+final class MovieDetailsRepositoryImpl: MovieDetailsRepository {
+  private let movieService: any MovieServiceProtocol
+
+  init(movieService: any MovieServiceProtocol) {
+    self.movieService = movieService
+  }
+
+  func fetchMovieDetails(_ movieID: Int, completion: @escaping (Result<MovieDetails, AppError>) -> Void) {
+    movieService.fetchMovieDetails(movieID) { result in
+      switch result {
+      case .success(let details):
+        completion(.success(details))
+      case .failure(let error):
+        completion(.failure(AppError.map(error)))
+      }
+    }
+  }
+}
+
+protocol FetchMovieDetailsUseCase {
+  func execute(movieID: Int, completion: @escaping (Result<MovieDetails, AppError>) -> Void)
+}
+
+final class DefaultFetchMovieDetailsUseCase: FetchMovieDetailsUseCase {
+  private let repository: any MovieDetailsRepository
+
+  init(repository: any MovieDetailsRepository) {
+    self.repository = repository
+  }
+
+  func execute(movieID: Int, completion: @escaping (Result<MovieDetails, AppError>) -> Void) {
+    repository.fetchMovieDetails(movieID, completion: completion)
+  }
+}
+
+@MainActor
 class DetailsViewModel {
   let detailType: DetailType
-  private let movieService: any MovieServiceProtocol
+  private let fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase
   let title = Observable<String?>(nil)
   let description = Observable<String?>(nil)
   let imageUrl = Observable<URL?>(nil)
   let trailerImageUrl = Observable<URL?>(nil)
   let metadata = Observable<String?>(nil)
-  
+
   // Mock data for UI components
   let providers = Observable<[(name: String, color: String)]>([])
   let cast = Observable<[Cast]>([])
   let episodes = Observable<[(code: String, title: String, desc: String)]>([])
   let rating = Observable<Double>(4.0)
-  let screenState = Observable<StateMovieDetails>(.loading(false))
-  
-  weak var coordinator: DetailsCoordinator?
-  
+  let screenState = Observable<DetailsState>(.idle)
+
+  weak var coordinator: (any DetailsRouting)?
+
   init(
     detailType: DetailType,
-    movieService: any MovieServiceProtocol = MovieService.shared
+    fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase
   ) {
     self.detailType = detailType
-    self.movieService = movieService
+    self.fetchMovieDetailsUseCase = fetchMovieDetailsUseCase
     setupDetails(for: detailType)
     setupMockContent()
   }
-  
+
   func fetchDataMovie(_ movie: Movie) {
-    movieService.fetchMovieDetails(movie.id) { [weak self] result in
+    screenState.value = .loading
+    fetchMovieDetailsUseCase.execute(movieID: movie.id) { [weak self] result in
       switch result {
       case .success(let details):
-        self?.screenState.value = .success(details)
+        self?.screenState.value = .loaded(details)
         self?.metadata(details)
         self?.cast.value = details.credits?.cast
       case .failure(let error):
-        self?.screenState.value = .fails(error.localizedDescription)
+        self?.screenState.value = .error(error)
       }
     }
   }
-  
+
   private func setupDetails(for type: DetailType) {
     switch type {
     case .movie(let movie):
@@ -62,7 +105,6 @@ class DetailsViewModel {
       if let imageURL = Configuration.imageBaseURL {
         imageUrl.value = URL(string: imageURL  + movie.posterPath)
       }
-      // Example metadata: "2024 • 2h 46m • Ficção Científica, Ação"
       fetchDataMovie(movie)
     case .serie(let serie):
       title.value = serie.name
@@ -75,22 +117,22 @@ class DetailsViewModel {
       imageUrl.value = actor.name.isEmpty ? nil : URL(string: "https://image.tmdb.org/t/p/w500/\(actor.profilePath)")
     }
   }
-  
+
   private func metadata(_ detail: MovieDetails) {
     let year = detail.releaseDate.prefix(4)
     var genres = ""
-    
+
     detail.genres.forEach { genre in
       genres += " \(genre.name)"
     }
     let tempo = formatDuration(minutes: detail.runtime)
     metadata.value = "\(year) • \(tempo) • \(genres)"
   }
-  
+
   func formatDuration(minutes: Int) -> String {
       let hours = minutes / 60
       let remainingMinutes = minutes % 60
-      
+
       if hours > 0 {
           return "\(hours)h \(remainingMinutes)min"
       } else {
@@ -98,7 +140,7 @@ class DetailsViewModel {
       }
   }
 
-  
+
   private func setupMockContent() {
     providers.value = [
       ("Netflix", "#E50914"),
@@ -106,10 +148,10 @@ class DetailsViewModel {
       ("Prime Video", "#00052d"),
       ("Apple TV", "#f5f5f7")
     ]
-    
+
     trailerImageUrl.value = URL(string: "https://shre.ink/5mLr")
-    
-    
+
+
     episodes.value = [
       ("E01", "O Horizonte de Eventos", "A tripulação descobre os primeiros sinais de vida no planeta Miller."),
       ("E02", "Congelamento Profundo", "Uma tempestade inesperada coloca em risco a base principal de exploração.")
