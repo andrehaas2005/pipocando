@@ -5,6 +5,7 @@
 //  Created by Andre  Haas on 12/02/26.
 //
 
+import Foundation
 enum NetworkMovieError: Error {
   case invalidURL
   case networkError
