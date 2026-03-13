@@ -6,7 +6,7 @@
 import Foundation
 
 protocol FetchTopRatedSeriesUseCase {
-  func execute(completion: @escaping (Result<[Serie], AppError>) -> Void)
+  func execute() async throws -> [Serie]
 }
 
 final class DefaultFetchTopRatedSeriesUseCase: FetchTopRatedSeriesUseCase {
@@ -16,7 +16,7 @@ final class DefaultFetchTopRatedSeriesUseCase: FetchTopRatedSeriesUseCase {
     self.repository = repository
   }
 
-  func execute(completion: @escaping (Result<[Serie], AppError>) -> Void) {
-    repository.fetchTopRatedSeries(completion: completion)
+  func execute() async throws -> [Serie] {
+    try await repository.fetchTopRatedSeries()
   }
 }

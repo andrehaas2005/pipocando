@@ -12,13 +12,15 @@ final class SeriesRepositoryImpl: SeriesRepository {
     self.serieService = serieService
   }
 
-  func fetchTopRatedSeries(completion: @escaping (Result<[Serie], AppError>) -> Void) {
-    serieService.fetchSerieTopReted { result in
-      switch result {
-      case .success(let series):
-        completion(.success(series))
-      case .failure(let error):
-        completion(.failure(AppError.map(error)))
+  func fetchTopRatedSeries() async throws -> [Serie] {
+    try await withCheckedThrowingContinuation { continuation in
+      serieService.fetchSerieTopReted { result in
+        switch result {
+        case .success(let series):
+          continuation.resume(returning: series)
+        case .failure(let error):
+          continuation.resume(throwing: AppError.map(error))
+        }
       }
     }
   }

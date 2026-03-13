@@ -32,12 +32,12 @@ class CalendarViewModel {
   func fetchData() {
     dates.value = generateWeekDates()
     releases.value = .loading
-    fetchTopRatedSeriesUseCase.execute { [weak self] result in
-      switch result {
-      case .success(let series):
+    Task { [weak self] in
+      do {
+        let series = try await fetchTopRatedSeriesUseCase.execute()
         self?.releases.value = .loaded(series)
-      case .failure(let error):
-        self?.releases.value = .error(error)
+      } catch {
+        self?.releases.value = .error(AppError.map(error))
       }
     }
   }
