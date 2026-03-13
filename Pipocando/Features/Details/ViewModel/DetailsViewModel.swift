@@ -46,14 +46,15 @@ class DetailsViewModel {
 
   func fetchDataMovie(_ movie: Movie) {
     screenState.value = .loading
-    fetchMovieDetailsUseCase.execute(movieID: movie.id) { [weak self] result in
-      switch result {
-      case .success(let details):
+
+    Task { [weak self] in
+      do {
+        let details = try await fetchMovieDetailsUseCase.execute(movieID: movie.id)
         self?.screenState.value = .loaded(details)
         self?.metadata(details)
         self?.cast.value = details.credits?.cast
-      case .failure(let error):
-        self?.screenState.value = .error(error)
+      } catch {
+        self?.screenState.value = .error(AppError.map(error))
       }
     }
   }

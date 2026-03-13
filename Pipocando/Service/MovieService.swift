@@ -17,9 +17,7 @@ extension NetworkMovieService: MovieRequesting {}
 final class MovieService: MovieServiceProtocol {
 
   private let service: MovieRequesting
-  public static let shared = MovieService()
-
-  init(service: MovieRequesting = NetworkMovieService.shared) {
+  init(service: MovieRequesting) {
     self.service = service
   }
 

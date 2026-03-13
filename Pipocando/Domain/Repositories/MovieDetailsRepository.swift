@@ -6,5 +6,5 @@
 import Foundation
 
 protocol MovieDetailsRepository {
-  func fetchMovieDetails(_ movieID: Int, completion: @escaping (Result<MovieDetails, AppError>) -> Void)
+  func fetchMovieDetails(_ movieID: Int) async throws -> MovieDetails
 }
