@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Alamofire
 enum NetworkMovieError: Error {
   case invalidURL
   case networkError
@@ -47,6 +48,31 @@ extension AppError {
         return .invalidConfiguration
       case .invalidURL:
         return .invalidResponse
+      }
+    }
+
+    if let afError = error as? AFError {
+      if afError.isSessionTaskError || afError.isSessionInvalidatedError {
+        return .network
+      }
+
+      if afError.isResponseValidationError || afError.isResponseSerializationError {
+        return .invalidResponse
+      }
+
+      if afError.responseCode != nil {
+        return .invalidResponse
+      }
+
+      if let urlError = afError.underlyingError as? URLError {
+        switch urlError.code {
+        case .notConnectedToInternet, .networkConnectionLost, .timedOut,
+            .cannotFindHost, .cannotConnectToHost, .internationalRoamingOff,
+            .dataNotAllowed:
+          return .network
+        default:
+          return .invalidResponse
+        }
       }
     }
 

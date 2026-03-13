@@ -56,16 +56,11 @@ jobs:
 
       - name: Build
         run: |
-          DEST_LINE=$(xcodebuild -showdestinations -project Pipocando.xcodeproj -scheme Pipocando | awk '/platform:iOS Simulator, arch:/{print; exit}')
-          if [ -z "$DEST_LINE" ]; then
-            echo "No concrete iOS Simulator destination found for build."
-            xcodebuild -showdestinations -project Pipocando.xcodeproj -scheme Pipocando
+          if [ -z "$IOS_DESTINATION" ]; then
+            echo "IOS_DESTINATION is not set for build."
+            xcrun simctl list devices available
             exit 1
           fi
-
-          DEST_NAME=$(echo "$DEST_LINE" | sed -n 's/.*name:\([^,}]*\).*/\1/p')
-          DEST_OS=$(echo "$DEST_LINE" | sed -n 's/.*OS:\([^,}]*\).*/\1/p')
-          IOS_DESTINATION="platform=iOS Simulator,name=$DEST_NAME,OS=$DEST_OS"
           echo "Using destination for build: $IOS_DESTINATION"
 
           xcodebuild \
@@ -78,16 +73,11 @@ jobs:
 
       - name: Test
         run: |
-          DEST_LINE=$(xcodebuild -showdestinations -project Pipocando.xcodeproj -scheme Pipocando | awk '/platform:iOS Simulator, arch:/{print; exit}')
-          if [ -z "$DEST_LINE" ]; then
-            echo "No concrete iOS Simulator destination found for test."
-            xcodebuild -showdestinations -project Pipocando.xcodeproj -scheme Pipocando
+          if [ -z "$IOS_DESTINATION" ]; then
+            echo "IOS_DESTINATION is not set for test."
+            xcrun simctl list devices available
             exit 1
           fi
-
-          DEST_NAME=$(echo "$DEST_LINE" | sed -n 's/.*name:\([^,}]*\).*/\1/p')
-          DEST_OS=$(echo "$DEST_LINE" | sed -n 's/.*OS:\([^,}]*\).*/\1/p')
-          IOS_DESTINATION="platform=iOS Simulator,name=$DEST_NAME,OS=$DEST_OS"
           echo "Using destination for test: $IOS_DESTINATION"
 
           xcodebuild \
