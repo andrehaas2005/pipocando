@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Select compatible Xcode and simulator destination
+      - name: Select compatible Xcode
         run: |
           XCODE_APPS=$(compgen -G '/Applications/Xcode*.app' | sort -Vr)
 
@@ -27,23 +27,16 @@ jobs:
             DEV_DIR="$XCODE_APP/Contents/Developer"
             echo "Trying Xcode at: $XCODE_APP"
 
-            DEST_LINE=$(DEVELOPER_DIR="$DEV_DIR" xcodebuild -showdestinations -project Pipocando.xcodeproj -scheme Pipocando 2>/dev/null | awk '/platform:iOS Simulator/ {print; exit}')
+            DEST_LINE=$(DEVELOPER_DIR="$DEV_DIR" xcodebuild -showdestinations -project Pipocando.xcodeproj -scheme Pipocando 2>/dev/null | awk '/platform:iOS Simulator, arch:/{print; exit}')
 
             if [ -n "$DEST_LINE" ]; then
-              DEST_ID=$(echo "$DEST_LINE" | sed -n 's/.*id:\([^,}]*\).*/\1/p')
-
-              if [ -n "$DEST_ID" ]; then
-                echo "Using Xcode: $XCODE_APP"
-                echo "Using simulator destination: $DEST_ID"
-                echo "DEVELOPER_DIR=$DEV_DIR" >> "$GITHUB_ENV"
-                echo "IOS_DESTINATION=platform=iOS Simulator,id=$DEST_ID" >> "$GITHUB_ENV"
-                exit 0
-              fi
+              echo "Using Xcode: $XCODE_APP"
+              echo "DEVELOPER_DIR=$DEV_DIR" >> "$GITHUB_ENV"
+              exit 0
             fi
           done
 
-          echo "No compatible Xcode + iOS Simulator destination found."
-          echo "Available Xcode apps:"
+          echo "No compatible Xcode with concrete iOS Simulator destinations found."
           compgen -G '/Applications/Xcode*.app' || true
           exit 1
 
@@ -63,6 +56,18 @@ jobs:
 
       - name: Build
         run: |
+          DEST_LINE=$(xcodebuild -showdestinations -project Pipocando.xcodeproj -scheme Pipocando | awk '/platform:iOS Simulator, arch:/{print; exit}')
+          if [ -z "$DEST_LINE" ]; then
+            echo "No concrete iOS Simulator destination found for build."
+            xcodebuild -showdestinations -project Pipocando.xcodeproj -scheme Pipocando
+            exit 1
+          fi
+
+          DEST_NAME=$(echo "$DEST_LINE" | sed -n 's/.*name:\([^,}]*\).*/\1/p')
+          DEST_OS=$(echo "$DEST_LINE" | sed -n 's/.*OS:\([^,}]*\).*/\1/p')
+          IOS_DESTINATION="platform=iOS Simulator,name=$DEST_NAME,OS=$DEST_OS"
+          echo "Using destination for build: $IOS_DESTINATION"
+
           xcodebuild \
             -project Pipocando.xcodeproj \
             -scheme Pipocando \
@@ -73,6 +78,18 @@ jobs:
 
       - name: Test
         run: |
+          DEST_LINE=$(xcodebuild -showdestinations -project Pipocando.xcodeproj -scheme Pipocando | awk '/platform:iOS Simulator, arch:/{print; exit}')
+          if [ -z "$DEST_LINE" ]; then
+            echo "No concrete iOS Simulator destination found for test."
+            xcodebuild -showdestinations -project Pipocando.xcodeproj -scheme Pipocando
+            exit 1
+          fi
+
+          DEST_NAME=$(echo "$DEST_LINE" | sed -n 's/.*name:\([^,}]*\).*/\1/p')
+          DEST_OS=$(echo "$DEST_LINE" | sed -n 's/.*OS:\([^,}]*\).*/\1/p')
+          IOS_DESTINATION="platform=iOS Simulator,name=$DEST_NAME,OS=$DEST_OS"
+          echo "Using destination for test: $IOS_DESTINATION"
+
           xcodebuild \
             -project Pipocando.xcodeproj \
             -scheme Pipocando \
