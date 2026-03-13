@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import Alamofire
 @testable import Pipocando
 
 @MainActor
@@ -58,6 +59,18 @@ final class PipocandoTests: XCTestCase {
     default:
       XCTFail("Expected unknown AppError")
     }
+  }
+
+  func testAppErrorMapsAFErrorSessionTaskFailedToNetwork() {
+    let afError = AFError.sessionTaskFailed(error: URLError(.notConnectedToInternet))
+
+    XCTAssertEqual(AppError.map(afError).userMessage, AppError.network.userMessage)
+  }
+
+  func testAppErrorMapsAFErrorValidationFailedToInvalidResponse() {
+    let afError = AFError.responseValidationFailed(reason: .unacceptableStatusCode(code: 500))
+
+    XCTAssertEqual(AppError.map(afError).userMessage, AppError.invalidResponse.userMessage)
   }
 
   func testHomeViewModelEmitsLoadedStateOnUseCaseSuccess() async {
