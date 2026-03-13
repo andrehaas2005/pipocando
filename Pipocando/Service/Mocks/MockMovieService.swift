@@ -5,43 +5,47 @@
 //  Created by Andre  Haas on 28/05/25.
 //
 
-
-// Services/MockMovieService.swift
 import Foundation
 
 class MockMovieService: MovieServiceProtocol {
-  
+
   public static var shared = MockMovieService()
-  
+
   func fetchMovieDetails(_ movie_id: Int, completion: @escaping (Result<MovieDetails, any Error>) -> Void) {
-    
+    completion(.failure(NSError(domain: "MockMovieService", code: 404, userInfo: [NSLocalizedDescriptionKey: "Movie details mock not implemented."])))
   }
-  
+
   func fetchPopularMovies(completion: @escaping (Result<[Movie], any Error>) -> Void) {
-    
+    getMockData { [weak self] result in
+      guard self != nil else { return }
+      completion(.success(result))
+    }
   }
-  
+
   func fetchTopRatedMovies(completion: @escaping (Result<[Movie], any Error>) -> Void) {
-    
+    getMockData { [weak self] result in
+      guard self != nil else { return }
+      completion(.success(result))
+    }
   }
-  
+
   func fetchNowPlayingMovies(completion: @escaping (Result<[Movie], Error>) -> Void) {
     getMockData { [weak self] result in
-      guard (self != nil) else {return}
+      guard self != nil else { return }
       completion(.success(result))
     }
   }
-  
+
   func fetchUpcomingMovies(completion: @escaping (Result<[Movie], Error>) -> Void) {
     getMockData { [weak self] result in
-      guard (self != nil) else {return}
+      guard self != nil else { return }
       completion(.success(result))
     }
   }
-  
+
   func fetchRecentlyWatchedMovies(completion: @escaping (Result<[Movie], Error>) -> Void) {
     getMockData { [weak self] result in
-      guard (self != nil) else {return}
+      guard self != nil else { return }
       completion(.success(result))
     }
   }

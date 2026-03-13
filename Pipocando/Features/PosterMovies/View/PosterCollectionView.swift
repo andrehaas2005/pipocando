@@ -54,14 +54,12 @@ class PosterCollectionView: UIView {
   private func setupBindings() {
     viewModel.screenState.bind { state in
       switch state {
-      case .failure(let erro):
+      case .idle, .loading, .error:
         break
-      case .loading(isLoading: let _):
-        break
-      case .success(let movies):
+      case .loaded(let movies):
         self.listMovies = movies
         self.posterCollection.reloadData()
-      default:
+      case .none:
         break
       }
     }
@@ -69,7 +67,7 @@ class PosterCollectionView: UIView {
 }
 extension PosterCollectionView: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    print("⛔︎ \(listMovies.count)")
+    AppLogger.debug("Poster items count=\(listMovies.count)", category: .uiState)
     return listMovies.count
     
   }
@@ -112,7 +110,7 @@ extension PosterCollectionView: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     
     let movieSelected = listMovies[indexPath.row]
-    print("🎦 movie_id: \(movieSelected.id) - \(movieSelected.title)")
+    AppLogger.debug("Selected movie id=\(movieSelected.id) title=\(movieSelected.title)", category: .navigation)
     delegate?.didSelectMovie(movieSelected)
   }
   

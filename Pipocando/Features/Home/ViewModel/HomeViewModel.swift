@@ -7,22 +7,29 @@
 
 import Foundation
 
+protocol HomeRouting: AnyObject {
+  func showMovieDetails(_ movie: Movie)
+}
+
+@MainActor
 class HomeViewModel {
-  var service: MovieServiceProtocol
-  weak var coordinator: HomeCoordinator?
-  var screenState: Observable<MoviePosterState> = .init(.loading(isLoading: false))
-  
-  init(service: MovieServiceProtocol = MovieService()) {
-    self.service = service
+  private let fetchNowPlayingMoviesUseCase: any FetchNowPlayingMoviesUseCase
+  weak var coordinator: (any HomeRouting)?
+  var screenState: Observable<MoviePosterState> = .init(.idle)
+
+  init(fetchNowPlayingMoviesUseCase: any FetchNowPlayingMoviesUseCase) {
+    self.fetchNowPlayingMoviesUseCase = fetchNowPlayingMoviesUseCase
   }
-  
+
   func fetchData() {
-    service.fetchNowPlayingMovies { [weak self] result in
-      switch result {
-      case .success(let movies):
-        self?.screenState.value = .success(movies)
-      case .failure(let error):
-        self?.screenState.value = .failure(error.localizedDescription)
+    screenState.value = .loading
+
+    Task { [weak self] in
+      do {
+        let movies = try await fetchNowPlayingMoviesUseCase.execute()
+        self?.screenState.value = .loaded(movies)
+      } catch {
+        self?.screenState.value = .error(AppError.map(error))
       }
     }
   }

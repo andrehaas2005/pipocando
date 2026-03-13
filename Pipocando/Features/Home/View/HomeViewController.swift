@@ -23,37 +23,37 @@ final class HomeViewController: UIViewController {
   private let mainStackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
-    stackView.spacing = 32
+    stackView.spacing = Spacing.xl
     return stackView
   }()
   
-  private let posterMovies: PosterCollectionView = {
-    let poster = PosterCollectionView(viewModel: PosterViewModel())
-    return poster
-  }()
+  private let posterMovies: PosterCollectionView
   
   private let continueWatchingLabel = Utilities.createSectionLabel("CONTINUAR ASSISTINDO")
   private let continueWatchingStackView: UIStackView = {
     let stack = UIStackView()
     stack.axis = .vertical
-    stack.spacing = 12
+    stack.spacing = Spacing.sm
     return stack
   }()
   
   private let trendingLabel = Utilities.createSectionLabel("TENDÊNCIAS DA SEMANA")
   
-  private let carrosselMoviesLancamento: CarrosselCollectionView = {
-    let carrossel = CarrosselCollectionView(viewModel: CarrosselViewModel())
-    return carrossel
-  }()
+  private let carrosselMoviesLancamento: CarrosselCollectionView
   
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
   
-  init(viewModel: HomeViewModel) {
+  init(
+    viewModel: HomeViewModel,
+    posterViewModel: PosterViewModel,
+    carrosselViewModel: CarrosselViewModel
+  ) {
     self.viewModel = viewModel
+    self.posterMovies = PosterCollectionView(viewModel: posterViewModel)
+    self.carrosselMoviesLancamento = CarrosselCollectionView(viewModel: carrosselViewModel)
     super.init(nibName: nil, bundle: nil)
   }
   
@@ -129,12 +129,10 @@ final class HomeViewController: UIViewController {
     viewModel.screenState.bind {[weak self] state in
       guard let state = state else {return}
       switch state {
-      case .loading(isLoading: _):
+      case .idle, .loading, .error:
         break
-      case .success(let movies):
+      case .loaded(let movies):
         self?.updateContinueWatching(movies)
-      case .failure(_):
-        break
       }
     }
   }

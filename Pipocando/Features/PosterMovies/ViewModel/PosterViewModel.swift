@@ -6,23 +6,25 @@
 //
 import Foundation
 
+@MainActor
 class PosterViewModel: MovieViewModelProtocol {
-  
-  var screenState: Observable<MoviePosterState> = .init(.loading(isLoading: false))
-  
-  var movieService: (any MovieServiceProtocol)
-  
-  init(movieService: MovieServiceProtocol = MovieService()) {
-    self.movieService = movieService
+
+  var screenState: Observable<MoviePosterState> = .init(.idle)
+  private let fetchNowPlayingMoviesUseCase: any FetchNowPlayingMoviesUseCase
+
+  init(fetchNowPlayingMoviesUseCase: any FetchNowPlayingMoviesUseCase) {
+    self.fetchNowPlayingMoviesUseCase = fetchNowPlayingMoviesUseCase
   }
-  
+
   func fetchData() {
-    movieService.fetchNowPlayingMovies { result in
-      switch result {
-      case .success(let movies):
-        self.screenState.value = .success(movies)
-      case .failure(let error):
-        self.screenState.value = .failure(error.localizedDescription)
+    screenState.value = .loading
+
+    Task { [weak self] in
+      do {
+        let movies = try await fetchNowPlayingMoviesUseCase.execute()
+        self?.screenState.value = .loaded(movies)
+      } catch {
+        self?.screenState.value = .error(AppError.map(error))
       }
     }
   }

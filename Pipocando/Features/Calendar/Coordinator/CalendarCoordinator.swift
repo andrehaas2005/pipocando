@@ -8,16 +8,24 @@
 import UIKit
 
 class CalendarCoordinator: Coordinator {
-    var childCoordinators: [Coordinator] = []
-    var navigationController: NavigationController
+  var childCoordinators: [Coordinator] = []
+  var navigationController: NavigationController
+  private let fetchTopRatedSeriesUseCase: any FetchTopRatedSeriesUseCase
 
-    init(navigationController: NavigationController) {
-        self.navigationController = navigationController
-    }
+  init(
+    navigationController: NavigationController,
+    fetchTopRatedSeriesUseCase: any FetchTopRatedSeriesUseCase
+  ) {
+    self.navigationController = navigationController
+    self.fetchTopRatedSeriesUseCase = fetchTopRatedSeriesUseCase
+  }
 
-    func start() {
-        let viewModel = CalendarViewModel(coordinator: self)
-        let viewController = CalendarViewController(viewModel: viewModel)
-        navigationController.pushViewController(viewController, animated: true)
-    }
+  func start() {
+    let viewModel = CalendarViewModel(coordinator: self, fetchTopRatedSeriesUseCase: fetchTopRatedSeriesUseCase)
+    let viewController = CalendarViewController(viewModel: viewModel)
+    navigationController.pushViewController(viewController, animated: true)
+  }
 }
+
+
+extension CalendarCoordinator: CalendarRouting {}

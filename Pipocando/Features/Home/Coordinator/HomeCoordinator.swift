@@ -8,37 +8,52 @@
 import UIKit
 
 class HomeCoordinator: Coordinator {
-  var childCoordinators: [any Coordinator] = []
-  
+  var childCoordinators: [Coordinator] = []
   var navigationController: NavigationController
-  
   weak var parentCoordinator: AppCoordinator?
-  
-  
-  
-  init(navigationController: NavigationController){
+
+  private let dependencies: AppDependencies
+
+  init(
+    navigationController: NavigationController,
+    dependencies: AppDependencies
+  ) {
     self.navigationController = navigationController
+    self.dependencies = dependencies
   }
-  
+
   func start() {
-    let movieService = MovieService()
-    let homeViewModel = HomeViewModel(service: movieService)
-    let homeViewController = HomeViewController(viewModel: homeViewModel)
+    let homeUseCase = dependencies.makeFetchNowPlayingMoviesUseCase()
+    let posterUseCase = dependencies.makeFetchNowPlayingMoviesUseCase()
+    let carrosselUseCase = dependencies.makeFetchNowPlayingMoviesUseCase()
+
+    let homeViewModel = HomeViewModel(fetchNowPlayingMoviesUseCase: homeUseCase)
+    let posterViewModel = PosterViewModel(fetchNowPlayingMoviesUseCase: posterUseCase)
+    let carrosselViewModel = CarrosselViewModel(fetchNowPlayingMoviesUseCase: carrosselUseCase)
+
+    let homeViewController = HomeViewController(
+      viewModel: homeViewModel,
+      posterViewModel: posterViewModel,
+      carrosselViewModel: carrosselViewModel
+    )
+
     homeViewModel.coordinator = self
     homeViewController.delegate = self
     navigationController.setViewControllers([homeViewController], animated: true)
   }
-  
-  private func showMovieDetails(_ movie: Movie) {
-    // Cria e inicia um DetailsCoordinator para gerenciar o fluxo de detalhes.
-    let detailsCoordinator = DetailsCoordinator(navigationController: navigationController)
-    detailsCoordinator.parentCoordinator = self // Define o HomeCoordinator como pai
-    childCoordinators.append(detailsCoordinator)
+
+  func showMovieDetails(_ movie: Movie) {
+    let detailsCoordinator = DetailsCoordinator(
+      navigationController: navigationController,
+      fetchMovieDetailsUseCase: dependencies.makeFetchMovieDetailsUseCase()
+    )
+    detailsCoordinator.parentCoordinator = self
+    addChild(detailsCoordinator)
     detailsCoordinator.start(with: .movie(movie))
   }
-  
-  func childDidFinish(_ corrd: Coordinator) {
-    
+
+  func childDidFinish(_ coordinator: Coordinator) {
+    removeChild(coordinator)
   }
 }
 
@@ -46,10 +61,9 @@ extension HomeCoordinator: HomeViewControllerDelegate {
   func didSelectMovie(_ movie: Movie) {
     showMovieDetails(movie)
   }
-  
-  func didRequestLogout() {
-    
-  }
-  
-  
+
+  func didRequestLogout() {}
 }
+
+
+extension HomeCoordinator: HomeRouting {}

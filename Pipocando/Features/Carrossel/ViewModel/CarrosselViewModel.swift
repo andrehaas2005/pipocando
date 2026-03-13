@@ -7,27 +7,26 @@
 
 import Foundation
 
-
+@MainActor
 class CarrosselViewModel: MovieViewModelProtocol {
-  
-  var movieService: any MovieServiceProtocol
-  var screenState: Observable<MoviePosterState> = Observable(.loading(isLoading: false))
-  
-  init(movieService: any MovieServiceProtocol = MovieService()) {
-    self.movieService = movieService
+
+  private let fetchNowPlayingMoviesUseCase: any FetchNowPlayingMoviesUseCase
+  var screenState: Observable<MoviePosterState> = .init(.idle)
+
+  init(fetchNowPlayingMoviesUseCase: any FetchNowPlayingMoviesUseCase) {
+    self.fetchNowPlayingMoviesUseCase = fetchNowPlayingMoviesUseCase
   }
-  
+
   func fetchData() {
-    movieService.fetchNowPlayingMovies { [weak self] result in
-      switch result {
-      case .success(let movies):
-        self?.screenState.value = .success(movies)
-      case .failure(let error):
-        self?.screenState.value = .failure(error.localizedDescription)
+    screenState.value = .loading
+
+    Task { [weak self] in
+      do {
+        let movies = try await fetchNowPlayingMoviesUseCase.execute()
+        self?.screenState.value = .loaded(movies)
+      } catch {
+        self?.screenState.value = .error(AppError.map(error))
       }
     }
   }
-  
-  
-  
 }

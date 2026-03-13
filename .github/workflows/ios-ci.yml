@@ -1,0 +1,101 @@
+name: iOS CI
+
+on:
+  pull_request:
+    branches: [ main, master ]
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select compatible Xcode
+        run: |
+          XCODE_APPS=$(compgen -G '/Applications/Xcode*.app' | sort -Vr)
+
+          if [ -z "$XCODE_APPS" ]; then
+            echo "No Xcode installations found in /Applications."
+            exit 1
+          fi
+
+          for XCODE_APP in $XCODE_APPS; do
+            DEV_DIR="$XCODE_APP/Contents/Developer"
+            echo "Trying Xcode at: $XCODE_APP"
+
+            DEST_LINE=$(DEVELOPER_DIR="$DEV_DIR" xcodebuild -showdestinations -project Pipocando.xcodeproj -scheme Pipocando 2>/dev/null | awk '/platform:iOS Simulator, arch:/{print; exit}')
+
+            if [ -n "$DEST_LINE" ]; then
+              echo "Using Xcode: $XCODE_APP"
+              echo "DEVELOPER_DIR=$DEV_DIR" >> "$GITHUB_ENV"
+              exit 0
+            fi
+          done
+
+          echo "No compatible Xcode with concrete iOS Simulator destinations found."
+          compgen -G '/Applications/Xcode*.app' || true
+          exit 1
+
+
+      - name: Install SwiftLint and SwiftFormat
+        run: |
+          brew update
+          brew install swiftlint swiftformat
+
+      - name: Lint (SwiftLint)
+        run: swiftlint lint --strict
+
+      - name: Check formatting (SwiftFormat)
+        run: swiftformat --lint Pipocando PipocandoTests
+
+      - name: Resolve Swift Packages
+        run: xcodebuild -resolvePackageDependencies -project Pipocando.xcodeproj -scheme Pipocando
+
+      - name: Select available iOS Simulator destination
+        run: |
+          DESTINATION=$(xcrun simctl list devices available | awk -F '[()]' '/iPhone/ {print $2; exit}')
+          if [ -z "$DESTINATION" ]; then
+            echo "No available iPhone simulator found on runner."
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "Using simulator: $DESTINATION"
+          echo "IOS_DESTINATION=platform=iOS Simulator,id=$DESTINATION" >> "$GITHUB_ENV"
+
+      - name: Build
+        run: |
+          if [ -z "$IOS_DESTINATION" ]; then
+            echo "IOS_DESTINATION is not set for build."
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "Using destination for build: $IOS_DESTINATION"
+
+          xcodebuild \
+            -project Pipocando.xcodeproj \
+            -scheme Pipocando \
+            -destination "$IOS_DESTINATION" \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            build
+
+      - name: Test
+        run: |
+          if [ -z "$IOS_DESTINATION" ]; then
+            echo "IOS_DESTINATION is not set for test."
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "Using destination for test: $IOS_DESTINATION"
+
+          xcodebuild \
+            -project Pipocando.xcodeproj \
+            -scheme Pipocando \
+            -destination "$IOS_DESTINATION" \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            test
