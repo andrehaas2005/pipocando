@@ -16,9 +16,10 @@ enum DetailsState {
 }
 
 @MainActor
-class DetailsViewModel {
+final class DetailsViewModel {
   let detailType: DetailType
   private let fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase
+  private var fetchMovieTask: Task<Void, Never>?
   let title = Observable<String?>(nil)
   let description = Observable<String?>(nil)
   let imageUrl = Observable<URL?>(nil)
@@ -45,17 +46,29 @@ class DetailsViewModel {
   }
 
   func fetchDataMovie(_ movie: Movie) {
+    fetchMovieTask?.cancel()
     screenState.value = .loading
-    fetchMovieDetailsUseCase.execute(movieID: movie.id) { [weak self] result in
-      switch result {
-      case .success(let details):
-        self?.screenState.value = .loaded(details)
-        self?.metadata(details)
-        self?.cast.value = details.credits?.cast
-      case .failure(let error):
-        self?.screenState.value = .error(error)
+
+    fetchMovieTask = Task { [weak self] in
+      guard let self else { return }
+
+      do {
+        let details = try await fetchMovieDetailsUseCase.execute(movieID: movie.id)
+        guard !Task.isCancelled else { return }
+
+        screenState.value = .loaded(details)
+        updateMetadata(details)
+        cast.value = details.credits?.cast
+      } catch {
+        guard !Task.isCancelled else { return }
+        screenState.value = .error(AppError.map(error))
       }
     }
+  }
+
+
+  deinit {
+    fetchMovieTask?.cancel()
   }
 
   private func setupDetails(for type: DetailType) {
@@ -79,13 +92,9 @@ class DetailsViewModel {
     }
   }
 
-  private func metadata(_ detail: MovieDetails) {
+  private func updateMetadata(_ detail: MovieDetails) {
     let year = detail.releaseDate.prefix(4)
-    var genres = ""
-
-    detail.genres.forEach { genre in
-      genres += " \(genre.name)"
-    }
+    let genres = detail.genres.map(\.name).joined(separator: " ")
     let tempo = formatDuration(minutes: detail.runtime)
     metadata.value = "\(year) • \(tempo) • \(genres)"
   }

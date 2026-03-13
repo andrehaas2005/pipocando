@@ -27,17 +27,20 @@ final class AppDependencyContainer: AppDependencies {
   }
 
   func makeFetchNowPlayingMoviesUseCase() -> any FetchNowPlayingMoviesUseCase {
-    let repository = MoviesRepositoryImpl(movieService: movieService)
+    let remoteDataSource = DefaultMovieRemoteDataSource(movieService: movieService)
+    let repository = MoviesRepositoryImpl(remoteDataSource: remoteDataSource)
     return DefaultFetchNowPlayingMoviesUseCase(repository: repository)
   }
 
   func makeFetchTopRatedSeriesUseCase() -> any FetchTopRatedSeriesUseCase {
-    let repository = SeriesRepositoryImpl(serieService: serieService)
+    let remoteDataSource = DefaultSerieRemoteDataSource(serieService: serieService)
+    let repository = SeriesRepositoryImpl(remoteDataSource: remoteDataSource)
     return DefaultFetchTopRatedSeriesUseCase(repository: repository)
   }
 
   func makeFetchMovieDetailsUseCase() -> any FetchMovieDetailsUseCase {
-    let repository = MovieDetailsRepositoryImpl(movieService: movieService)
+    let remoteDataSource = DefaultMovieRemoteDataSource(movieService: movieService)
+    let repository = MovieDetailsRepositoryImpl(remoteDataSource: remoteDataSource)
     return DefaultFetchMovieDetailsUseCase(repository: repository)
   }
 

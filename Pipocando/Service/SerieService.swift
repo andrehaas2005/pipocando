@@ -6,13 +6,17 @@
 //
 
 import Foundation
-import Alamofire
+
+protocol SerieRequesting {
+  func request<T: Decodable>(_ request: APISerieRequest) async throws -> T
+}
+
+extension NetworkSerieService: SerieRequesting {}
 
 class SerieService: SerieServiceProtocol {
-  let service: NetworkSerieService
-  public static var shared: SerieService = .init()
-  
-  init(service: NetworkSerieService = .shared) {
+  let service: SerieRequesting
+
+  init(service: SerieRequesting) {
     self.service = service
   }
   

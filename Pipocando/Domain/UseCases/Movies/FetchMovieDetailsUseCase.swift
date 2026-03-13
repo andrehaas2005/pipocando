@@ -6,7 +6,7 @@
 import Foundation
 
 protocol FetchMovieDetailsUseCase {
-  func execute(movieID: Int, completion: @escaping (Result<MovieDetails, AppError>) -> Void)
+  func execute(movieID: Int) async throws -> MovieDetails
 }
 
 final class DefaultFetchMovieDetailsUseCase: FetchMovieDetailsUseCase {
@@ -16,7 +16,7 @@ final class DefaultFetchMovieDetailsUseCase: FetchMovieDetailsUseCase {
     self.repository = repository
   }
 
-  func execute(movieID: Int, completion: @escaping (Result<MovieDetails, AppError>) -> Void) {
-    repository.fetchMovieDetails(movieID, completion: completion)
+  func execute(movieID: Int) async throws -> MovieDetails {
+    try await repository.fetchMovieDetails(movieID)
   }
 }

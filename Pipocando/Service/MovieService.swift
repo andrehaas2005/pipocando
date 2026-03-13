@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 protocol MovieRequesting {
   func request<T: Decodable>(_ request: APIMovieRequest) async throws -> T
@@ -17,9 +16,7 @@ extension NetworkMovieService: MovieRequesting {}
 final class MovieService: MovieServiceProtocol {
 
   private let service: MovieRequesting
-  public static let shared = MovieService()
-
-  init(service: MovieRequesting = NetworkMovieService.shared) {
+  init(service: MovieRequesting) {
     self.service = service
   }
 

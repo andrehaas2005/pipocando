@@ -1,18 +1,10 @@
-//
-//  NetworkMovieService.swift
-//  Pipocando
-//
-//  Created by Andre  Haas on 11/02/26.
-//
-
 import Foundation
 import Alamofire
 
 final class NetworkMovieService: NetworkServiceProtocol {
   private let session: Session
-  public static let shared = NetworkMovieService()
 
-  public init(session: Session = AlamofireSessionProvider.shared) {
+  init(session: Session) {
     self.session = session
   }
 
@@ -37,7 +29,6 @@ final class NetworkMovieService: NetworkServiceProtocol {
     AppLogger.debug("Request started: \(request.path.path())", category: .network)
 
     return try await withCheckedThrowingContinuation { continuation in
-
       session.request(url,
                       method: request.method,
                       parameters: request.paramenters,

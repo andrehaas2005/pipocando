@@ -1,27 +1,13 @@
-//
-//  SeriesRepositoryImpl.swift
-//  Pipocando
-//
-
 import Foundation
 
 final class SeriesRepositoryImpl: SeriesRepository {
-  private let serieService: any SerieServiceProtocol
+  private let remoteDataSource: any SerieRemoteDataSource
 
-  init(serieService: any SerieServiceProtocol) {
-    self.serieService = serieService
+  init(remoteDataSource: any SerieRemoteDataSource) {
+    self.remoteDataSource = remoteDataSource
   }
 
   func fetchTopRatedSeries() async throws -> [Serie] {
-    try await withCheckedThrowingContinuation { continuation in
-      serieService.fetchSerieTopReted { result in
-        switch result {
-        case .success(let series):
-          continuation.resume(returning: series)
-        case .failure(let error):
-          continuation.resume(throwing: AppError.map(error))
-        }
-      }
-    }
+    try await remoteDataSource.fetchTopRatedSeries()
   }
 }
