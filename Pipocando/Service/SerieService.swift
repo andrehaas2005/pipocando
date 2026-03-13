@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 protocol SerieRequesting {
   func request<T: Decodable>(_ request: APISerieRequest) async throws -> T

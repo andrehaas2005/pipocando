@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 protocol MovieRequesting {
   func request<T: Decodable>(_ request: APIMovieRequest) async throws -> T
