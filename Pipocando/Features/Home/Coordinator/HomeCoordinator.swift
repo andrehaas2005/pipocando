@@ -23,9 +23,13 @@ class HomeCoordinator: Coordinator {
   }
 
   func start() {
-    let homeViewModel = HomeViewModel(fetchNowPlayingMoviesUseCase: dependencies.makeFetchNowPlayingMoviesUseCase())
-    let posterViewModel = PosterViewModel(movieService: dependencies.movieService)
-    let carrosselViewModel = CarrosselViewModel(movieService: dependencies.movieService)
+    let homeUseCase = dependencies.makeFetchNowPlayingMoviesUseCase()
+    let posterUseCase = dependencies.makeFetchNowPlayingMoviesUseCase()
+    let carrosselUseCase = dependencies.makeFetchNowPlayingMoviesUseCase()
+
+    let homeViewModel = HomeViewModel(fetchNowPlayingMoviesUseCase: homeUseCase)
+    let posterViewModel = PosterViewModel(fetchNowPlayingMoviesUseCase: posterUseCase)
+    let carrosselViewModel = CarrosselViewModel(fetchNowPlayingMoviesUseCase: carrosselUseCase)
 
     let homeViewController = HomeViewController(
       viewModel: homeViewModel,

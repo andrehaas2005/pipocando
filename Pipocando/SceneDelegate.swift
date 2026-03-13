@@ -18,7 +18,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     let window = UIWindow(windowScene: windowScene)
     self.window = window
     let navigationController = NavigationController()
-    let dependencies = AppDependencyContainer()
+
+    let networkMovieService = NetworkMovieService()
+    let networkSerieService = NetworkSerieService()
+    let movieService = MovieService(service: networkMovieService)
+    let serieService = SerieService(service: networkSerieService)
+
+    let dependencies = AppDependencyContainer(
+      movieService: movieService,
+      serieService: serieService
+    )
+
     appCoordinator = AppCoordinator(navigationController: navigationController, dependencies: dependencies)
     appCoordinator?.start()
     window.rootViewController = navigationController

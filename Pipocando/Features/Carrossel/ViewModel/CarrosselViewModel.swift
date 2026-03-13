@@ -10,22 +10,22 @@ import Foundation
 @MainActor
 class CarrosselViewModel: MovieViewModelProtocol {
 
-  var movieService: any MovieServiceProtocol
+  private let fetchNowPlayingMoviesUseCase: any FetchNowPlayingMoviesUseCase
   var screenState: Observable<MoviePosterState> = .init(.idle)
 
-  init(movieService: any MovieServiceProtocol) {
-    self.movieService = movieService
+  init(fetchNowPlayingMoviesUseCase: any FetchNowPlayingMoviesUseCase) {
+    self.fetchNowPlayingMoviesUseCase = fetchNowPlayingMoviesUseCase
   }
 
   func fetchData() {
     screenState.value = .loading
 
-    movieService.fetchNowPlayingMovies { [weak self] result in
+    fetchNowPlayingMoviesUseCase.execute { [weak self] result in
       switch result {
       case .success(let movies):
         self?.screenState.value = .loaded(movies)
       case .failure(let error):
-        self?.screenState.value = .error(AppError.map(error))
+        self?.screenState.value = .error(error)
       }
     }
   }

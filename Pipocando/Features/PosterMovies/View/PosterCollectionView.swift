@@ -67,7 +67,7 @@ class PosterCollectionView: UIView {
 }
 extension PosterCollectionView: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    print("⛔︎ \(listMovies.count)")
+    AppLogger.debug("Poster items count=\(listMovies.count)", category: .uiState)
     return listMovies.count
     
   }
@@ -110,7 +110,7 @@ extension PosterCollectionView: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     
     let movieSelected = listMovies[indexPath.row]
-    print("🎦 movie_id: \(movieSelected.id) - \(movieSelected.title)")
+    AppLogger.debug("Selected movie id=\(movieSelected.id) title=\(movieSelected.title)", category: .navigation)
     delegate?.didSelectMovie(movieSelected)
   }
   

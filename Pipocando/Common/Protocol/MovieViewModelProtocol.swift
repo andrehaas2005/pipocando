@@ -6,7 +6,6 @@
 //
 
 protocol MovieViewModelProtocol {
-  var movieService: any MovieServiceProtocol { get set }
   var screenState: Observable<MoviePosterState> { get set }
   func fetchData()
 }

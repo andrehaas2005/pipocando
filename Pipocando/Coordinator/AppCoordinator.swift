@@ -31,7 +31,7 @@ class AppCoordinator: Coordinator {
 
   init(
     navigationController: NavigationController,
-    dependencies: AppDependencies = AppDependencyContainer()
+    dependencies: AppDependencies
   ) {
     self.navigationController = navigationController
     self.dependencies = dependencies
