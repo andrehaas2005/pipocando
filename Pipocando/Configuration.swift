@@ -14,17 +14,30 @@ public enum Configuration {
     }
     return nil
   }()
-  
+
+  private static func stringValue(_ key: String) -> String? {
+    guard let raw = config?[key] as? String else { return nil }
+    let value = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+    return value.isEmpty ? nil : value
+  }
+
   static var baseAPIURL: String? {
-    return config?["URLBase"] as? String ?? ProcessInfo.processInfo.environment["BASE_URL"]
+    return stringValue("URLBase") ?? ProcessInfo.processInfo.environment["BASE_URL"]
   }
-  
+
   static var apiKey: String? {
-    return config?["APIKey"] as? String ?? ProcessInfo.processInfo.environment["API_KEY"]
+    let plistValue = stringValue("APIKey")
+    if let plistValue,
+       !plistValue.hasPrefix("<"),
+       !plistValue.uppercased().contains("SET_API_KEY") {
+      return plistValue
+    }
+
+    return ProcessInfo.processInfo.environment["API_KEY"]
   }
-  
+
   static var imageBaseURL: String? {
-    return config?["URLImageBase"] as? String ?? ProcessInfo.processInfo.environment["IMAGE_BASE_URL"]
+    return stringValue("URLImageBase") ?? ProcessInfo.processInfo.environment["IMAGE_BASE_URL"]
   }
   public enum Endpoints {
     static var genres: String {

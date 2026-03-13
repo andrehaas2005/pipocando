@@ -14,45 +14,6 @@ enum SerieState {
   case error(AppError)
 }
 
-protocol SeriesRepository {
-  func fetchTopRatedSeries(completion: @escaping (Result<[Serie], AppError>) -> Void)
-}
-
-final class SeriesRepositoryImpl: SeriesRepository {
-  private let serieService: any SerieServiceProtocol
-
-  init(serieService: any SerieServiceProtocol) {
-    self.serieService = serieService
-  }
-
-  func fetchTopRatedSeries(completion: @escaping (Result<[Serie], AppError>) -> Void) {
-    serieService.fetchSerieTopReted { result in
-      switch result {
-      case .success(let series):
-        completion(.success(series))
-      case .failure(let error):
-        completion(.failure(AppError.map(error)))
-      }
-    }
-  }
-}
-
-protocol FetchTopRatedSeriesUseCase {
-  func execute(completion: @escaping (Result<[Serie], AppError>) -> Void)
-}
-
-final class DefaultFetchTopRatedSeriesUseCase: FetchTopRatedSeriesUseCase {
-  private let repository: any SeriesRepository
-
-  init(repository: any SeriesRepository) {
-    self.repository = repository
-  }
-
-  func execute(completion: @escaping (Result<[Serie], AppError>) -> Void) {
-    repository.fetchTopRatedSeries(completion: completion)
-  }
-}
-
 @MainActor
 class CalendarViewModel {
   weak var coordinator: (any CalendarRouting)?

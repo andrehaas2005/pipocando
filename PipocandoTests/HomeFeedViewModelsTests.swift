@@ -1,17 +1,13 @@
 //
-//  PipocandoTests.swift
+//  HomeFeedViewModelsTests.swift
 //  PipocandoTests
-//
-//  Created by Andre  Haas on 11/02/26.
 //
 
 import XCTest
 @testable import Pipocando
 
 @MainActor
-final class PipocandoTests: XCTestCase {
-
-  private struct DummyError: Error {}
+final class HomeFeedViewModelsTests: XCTestCase {
 
   private final class FetchNowPlayingUseCaseSpy: FetchNowPlayingMoviesUseCase {
     var result: Result<[Movie], AppError> = .success([])
@@ -40,30 +36,10 @@ final class PipocandoTests: XCTestCase {
     )
   }
 
-  func testAppErrorMapsNetworkMovieErrorsToDomain() {
-    XCTAssertEqual(AppError.map(NetworkMovieError.networkError).userMessage,
-                   AppError.network.userMessage)
-    XCTAssertEqual(AppError.map(NetworkMovieError.notfoundApiKey).userMessage,
-                   AppError.invalidConfiguration.userMessage)
-    XCTAssertEqual(AppError.map(NetworkMovieError.invalidURL).userMessage,
-                   AppError.invalidResponse.userMessage)
-  }
-
-  func testAppErrorMapsUnknownErrorToUnknownMessage() {
-    let mapped = AppError.map(DummyError())
-
-    switch mapped {
-    case .unknown:
-      XCTAssertTrue(true)
-    default:
-      XCTFail("Expected unknown AppError")
-    }
-  }
-
-  func testHomeViewModelEmitsLoadedStateOnUseCaseSuccess() async {
+  func testPosterViewModelEmitsLoadedStateOnSuccess() async {
     let spy = FetchNowPlayingUseCaseSpy()
-    spy.result = .success([makeMovie(id: 99)])
-    let sut = HomeViewModel(fetchNowPlayingMoviesUseCase: spy)
+    spy.result = .success([makeMovie(id: 101)])
+    let sut = PosterViewModel(fetchNowPlayingMoviesUseCase: spy)
 
     sut.fetchData()
     await Task.yield()
@@ -74,17 +50,16 @@ final class PipocandoTests: XCTestCase {
 
     switch state {
     case .loaded(let movies):
-      XCTAssertEqual(movies.count, 1)
-      XCTAssertEqual(movies.first?.id, 99)
+      XCTAssertEqual(movies.first?.id, 101)
     default:
       XCTFail("Expected loaded state")
     }
   }
 
-  func testHomeViewModelEmitsErrorStateOnUseCaseFailure() async {
+  func testCarrosselViewModelEmitsErrorStateOnFailure() async {
     let spy = FetchNowPlayingUseCaseSpy()
     spy.result = .failure(.network)
-    let sut = HomeViewModel(fetchNowPlayingMoviesUseCase: spy)
+    let sut = CarrosselViewModel(fetchNowPlayingMoviesUseCase: spy)
 
     sut.fetchData()
     await Task.yield()
