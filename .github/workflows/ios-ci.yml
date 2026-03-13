@@ -20,12 +20,23 @@ jobs:
       - name: Resolve Swift Packages
         run: xcodebuild -resolvePackageDependencies -project Pipocando.xcodeproj -scheme Pipocando
 
+      - name: Select available iOS Simulator destination
+        run: |
+          DESTINATION=$(xcrun simctl list devices available | awk -F '[()]' '/iPhone/ {print $2; exit}')
+          if [ -z "$DESTINATION" ]; then
+            echo "No available iPhone simulator found on runner."
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "Using simulator: $DESTINATION"
+          echo "IOS_DESTINATION=platform=iOS Simulator,id=$DESTINATION" >> "$GITHUB_ENV"
+
       - name: Build
         run: |
           xcodebuild \
             -project Pipocando.xcodeproj \
             -scheme Pipocando \
-            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            -destination "$IOS_DESTINATION" \
             -configuration Debug \
             -sdk iphonesimulator \
             build
@@ -35,7 +46,7 @@ jobs:
           xcodebuild \
             -project Pipocando.xcodeproj \
             -scheme Pipocando \
-            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            -destination "$IOS_DESTINATION" \
             -configuration Debug \
             -sdk iphonesimulator \
             test
