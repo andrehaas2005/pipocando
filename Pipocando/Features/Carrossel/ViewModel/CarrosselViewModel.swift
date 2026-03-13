@@ -20,12 +20,12 @@ class CarrosselViewModel: MovieViewModelProtocol {
   func fetchData() {
     screenState.value = .loading
 
-    fetchNowPlayingMoviesUseCase.execute { [weak self] result in
-      switch result {
-      case .success(let movies):
+    Task { [weak self] in
+      do {
+        let movies = try await fetchNowPlayingMoviesUseCase.execute()
         self?.screenState.value = .loaded(movies)
-      case .failure(let error):
-        self?.screenState.value = .error(error)
+      } catch {
+        self?.screenState.value = .error(AppError.map(error))
       }
     }
   }

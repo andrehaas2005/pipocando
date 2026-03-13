@@ -12,8 +12,8 @@ final class HomeFeedViewModelsTests: XCTestCase {
   private final class FetchNowPlayingUseCaseSpy: FetchNowPlayingMoviesUseCase {
     var result: Result<[Movie], AppError> = .success([])
 
-    func execute(completion: @escaping (Result<[Movie], AppError>) -> Void) {
-      completion(result)
+    func execute() async throws -> [Movie] {
+      try result.get()
     }
   }
 
@@ -36,12 +36,13 @@ final class HomeFeedViewModelsTests: XCTestCase {
     )
   }
 
-  func testPosterViewModelEmitsLoadedStateOnSuccess() {
+  func testPosterViewModelEmitsLoadedStateOnSuccess() async {
     let spy = FetchNowPlayingUseCaseSpy()
     spy.result = .success([makeMovie(id: 101)])
     let sut = PosterViewModel(fetchNowPlayingMoviesUseCase: spy)
 
     sut.fetchData()
+    await Task.yield()
 
     guard let state = sut.screenState.value else {
       return XCTFail("Expected a state value")
@@ -55,12 +56,13 @@ final class HomeFeedViewModelsTests: XCTestCase {
     }
   }
 
-  func testCarrosselViewModelEmitsErrorStateOnFailure() {
+  func testCarrosselViewModelEmitsErrorStateOnFailure() async {
     let spy = FetchNowPlayingUseCaseSpy()
     spy.result = .failure(.network)
     let sut = CarrosselViewModel(fetchNowPlayingMoviesUseCase: spy)
 
     sut.fetchData()
+    await Task.yield()
 
     guard let state = sut.screenState.value else {
       return XCTFail("Expected a state value")

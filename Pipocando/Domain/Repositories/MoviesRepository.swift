@@ -6,5 +6,5 @@
 import Foundation
 
 protocol MoviesRepository {
-  func fetchNowPlayingMovies(completion: @escaping (Result<[Movie], AppError>) -> Void)
+  func fetchNowPlayingMovies() async throws -> [Movie]
 }

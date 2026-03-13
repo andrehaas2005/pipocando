@@ -12,13 +12,15 @@ final class MoviesRepositoryImpl: MoviesRepository {
     self.movieService = movieService
   }
 
-  func fetchNowPlayingMovies(completion: @escaping (Result<[Movie], AppError>) -> Void) {
-    movieService.fetchNowPlayingMovies { result in
-      switch result {
-      case .success(let movies):
-        completion(.success(movies))
-      case .failure(let error):
-        completion(.failure(AppError.map(error)))
+  func fetchNowPlayingMovies() async throws -> [Movie] {
+    try await withCheckedThrowingContinuation { continuation in
+      movieService.fetchNowPlayingMovies { result in
+        switch result {
+        case .success(let movies):
+          continuation.resume(returning: movies)
+        case .failure(let error):
+          continuation.resume(throwing: AppError.map(error))
+        }
       }
     }
   }

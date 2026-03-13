@@ -6,7 +6,7 @@
 import Foundation
 
 protocol FetchNowPlayingMoviesUseCase {
-  func execute(completion: @escaping (Result<[Movie], AppError>) -> Void)
+  func execute() async throws -> [Movie]
 }
 
 final class DefaultFetchNowPlayingMoviesUseCase: FetchNowPlayingMoviesUseCase {
@@ -16,7 +16,7 @@ final class DefaultFetchNowPlayingMoviesUseCase: FetchNowPlayingMoviesUseCase {
     self.repository = repository
   }
 
-  func execute(completion: @escaping (Result<[Movie], AppError>) -> Void) {
-    repository.fetchNowPlayingMovies(completion: completion)
+  func execute() async throws -> [Movie] {
+    try await repository.fetchNowPlayingMovies()
   }
 }
