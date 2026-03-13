@@ -91,8 +91,9 @@ class AppCoordinator: Coordinator {
 
     // 5. Profile
     let profileNavController = NavigationController()
-    let profileVC = ProfileViewController()
-    profileNavController.setViewControllers([profileVC], animated: false)
+    let profileCoordinator = ProfileCoordinator(navigationController: profileNavController)
+    addChild(profileCoordinator)
+    profileCoordinator.start()
     profileNavController.tabBarItem = UITabBarItem(title: "Perfil", image: UIImage(systemName: "person"), tag: 4)
     profileNavController.tabBarItem.selectedImage = UIImage(systemName: "person.fill")
 

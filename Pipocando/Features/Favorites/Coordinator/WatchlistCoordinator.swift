@@ -1,30 +1,22 @@
-//
-//  WatchlistCoordinator.swift
-//  AmorPorFilmesSeries
-//
-//  Created by Andre  Haas on 03/06/25.
-//
-
-
 import UIKit
 
-class WatchlistCoordinator: Coordinator {
-    var navigationController: NavigationController
-    
+final class WatchlistCoordinator: Coordinator {
+  var navigationController: NavigationController
+  var childCoordinators = [Coordinator]()
 
-    var childCoordinators = [Coordinator]()
+  init(navigationController: NavigationController) {
+    self.navigationController = navigationController
+  }
 
-    init(navigationController: NavigationController) {
-        self.navigationController = navigationController
-    }
+  func start() {
+    let watchlistViewModel = WatchlistViewModel(coordinator: self)
+    let watchlistViewController = WatchlistViewController(viewModel: watchlistViewModel)
+    navigationController.setViewControllers([watchlistViewController], animated: false)
+  }
+}
 
-    func start() {
-        let watchlistViewModel = WatchlistViewModel(coordinator: self)
-        let watchlistViewController = WatchlistViewController(viewModel: watchlistViewModel)
-        navigationController.setViewControllers([watchlistViewController], animated: false)
-    }
-
-    func showWatchedHistory() {
-        // Implemente a navegação para o histórico de filmes assistidos
-    }
+extension WatchlistCoordinator: WatchlistRouting {
+  func showWatchedHistory() {
+    AppLogger.debug("Histórico solicitado na watchlist", category: .navigation)
+  }
 }

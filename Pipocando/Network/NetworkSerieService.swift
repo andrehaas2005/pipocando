@@ -1,19 +1,10 @@
-//
-//  NetworkSerieService.swift
-//  Pipocando
-//
-//  Created by Andre  Haas on 14/02/26.
-//
-
 import Alamofire
 import Foundation
 
-
 final class NetworkSerieService: NetworkSerieServiceProtocol {
   private let session: Session
-  public static let shared = NetworkSerieService()
 
-  public init(session: Session = AlamofireSessionProvider.shared) {
+  init(session: Session) {
     self.session = session
   }
 
@@ -30,8 +21,10 @@ final class NetworkSerieService: NetworkSerieServiceProtocol {
 
     let url = baseUrl + request.path.path()
 
-    let headers: HTTPHeaders = ["Accept": "application/json",
-                                "Authorization": "Bearer \(apiKey)"]
+    let headers: HTTPHeaders = [
+      "Accept": "application/json",
+      "Authorization": "Bearer \(apiKey)"
+    ]
 
     AppLogger.debug("Request started: \(request.path.path())", category: .network)
 

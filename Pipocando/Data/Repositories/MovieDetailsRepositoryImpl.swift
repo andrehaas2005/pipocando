@@ -1,27 +1,13 @@
-//
-//  MovieDetailsRepositoryImpl.swift
-//  Pipocando
-//
-
 import Foundation
 
 final class MovieDetailsRepositoryImpl: MovieDetailsRepository {
-  private let movieService: any MovieServiceProtocol
+  private let remoteDataSource: any MovieRemoteDataSource
 
-  init(movieService: any MovieServiceProtocol) {
-    self.movieService = movieService
+  init(remoteDataSource: any MovieRemoteDataSource) {
+    self.remoteDataSource = remoteDataSource
   }
 
   func fetchMovieDetails(_ movieID: Int) async throws -> MovieDetails {
-    try await withCheckedThrowingContinuation { continuation in
-      movieService.fetchMovieDetails(movieID) { result in
-        switch result {
-        case .success(let details):
-          continuation.resume(returning: details)
-        case .failure(let error):
-          continuation.resume(throwing: AppError.map(error))
-        }
-      }
-    }
+    try await remoteDataSource.fetchMovieDetails(movieID: movieID)
   }
 }

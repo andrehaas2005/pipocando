@@ -40,6 +40,18 @@ jobs:
           compgen -G '/Applications/Xcode*.app' || true
           exit 1
 
+
+      - name: Install SwiftLint and SwiftFormat
+        run: |
+          brew update
+          brew install swiftlint swiftformat
+
+      - name: Lint (SwiftLint)
+        run: swiftlint lint --strict
+
+      - name: Check formatting (SwiftFormat)
+        run: swiftformat --lint Pipocando PipocandoTests
+
       - name: Resolve Swift Packages
         run: xcodebuild -resolvePackageDependencies -project Pipocando.xcodeproj -scheme Pipocando
 
