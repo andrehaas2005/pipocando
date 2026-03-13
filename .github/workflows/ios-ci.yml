@@ -14,8 +14,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Select Xcode 16.2
-        run: sudo xcode-select -s /Applications/Xcode_16.2.app
+      - name: Select compatible Xcode and simulator destination
+        run: |
+          XCODE_APPS=$(compgen -G '/Applications/Xcode*.app' | sort -Vr)
+
+          if [ -z "$XCODE_APPS" ]; then
+            echo "No Xcode installations found in /Applications."
+            exit 1
+          fi
+
+          for XCODE_APP in $XCODE_APPS; do
+            DEV_DIR="$XCODE_APP/Contents/Developer"
+            echo "Trying Xcode at: $XCODE_APP"
+
+            DEST_LINE=$(DEVELOPER_DIR="$DEV_DIR" xcodebuild -showdestinations -project Pipocando.xcodeproj -scheme Pipocando 2>/dev/null | awk '/platform:iOS Simulator/ {print; exit}')
+
+            if [ -n "$DEST_LINE" ]; then
+              DEST_ID=$(echo "$DEST_LINE" | sed -n 's/.*id:\([^,}]*\).*/\1/p')
+
+              if [ -n "$DEST_ID" ]; then
+                echo "Using Xcode: $XCODE_APP"
+                echo "Using simulator destination: $DEST_ID"
+                echo "DEVELOPER_DIR=$DEV_DIR" >> "$GITHUB_ENV"
+                echo "IOS_DESTINATION=platform=iOS Simulator,id=$DEST_ID" >> "$GITHUB_ENV"
+                exit 0
+              fi
+            fi
+          done
+
+          echo "No compatible Xcode + iOS Simulator destination found."
+          echo "Available Xcode apps:"
+          compgen -G '/Applications/Xcode*.app' || true
+          exit 1
 
       - name: Resolve Swift Packages
         run: xcodebuild -resolvePackageDependencies -project Pipocando.xcodeproj -scheme Pipocando
