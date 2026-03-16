@@ -1,6 +1,6 @@
 import Foundation
 
-struct WatchProvidersResponse: Decodable {
+public struct WatchProvidersResponse: Decodable {
   let results: [String: CountryWatchProvider]
 }
 

@@ -180,7 +180,8 @@ class CalendarViewController: UIViewController {
     }
 
     viewModel.selectedDateText.bind { [weak self] dateText in
-      self?.selectedDateLabel.text = dateText
+      guard let self = self, let dateText = dateText else {return}
+      self.selectedDateLabel.text = dateText
     }
 
     viewModel.releases.bind { [weak self] states in
