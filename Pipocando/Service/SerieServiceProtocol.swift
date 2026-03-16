@@ -10,6 +10,7 @@ protocol SerieServiceProtocol {
   func fetchSerieOnTheAir(completion: @escaping (Result<[Serie], any Error>) -> Void)
   func fetchSeriePopular(completion: @escaping (Result<[Serie], any Error>) -> Void)
   func fetchSerieAiringToday(completion: @escaping (Result<[Serie], any Error>) -> Void)
+  func fetchSeriesAiring(on date: String, completion: @escaping (Result<[Serie], any Error>) -> Void)
   
   func fetchLastWatchedSeriesEpisodes(completion: @escaping (Result<[Serie], Error>) -> Void)
   func fetchSerieDetails(completion: @escaping (Result<[Serie], Error>) -> Void)

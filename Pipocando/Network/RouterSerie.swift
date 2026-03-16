@@ -11,6 +11,7 @@ public enum RouterSerie {
   case onTheAir
   case popular
   case topRated
+  case discover
   case details(String)
   
   func path() -> String {
@@ -23,6 +24,8 @@ public enum RouterSerie {
       Configuration.Endpoints.Series.popular
     case .topRated:
       Configuration.Endpoints.Series.topRated
+    case .discover:
+      "discover/tv"
     case .details(let series_id):
       Configuration.Endpoints.Series.tv + series_id
     }
