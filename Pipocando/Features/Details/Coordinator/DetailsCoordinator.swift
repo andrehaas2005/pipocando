@@ -19,19 +19,23 @@ class DetailsCoordinator: Coordinator {
   var navigationController: NavigationController
 
   private let fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase
+  private let movieService: any MovieServiceProtocol
 
   init(
     navigationController: NavigationController,
-    fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase
+    fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase,
+    movieService: any MovieServiceProtocol
   ) {
     self.navigationController = navigationController
     self.fetchMovieDetailsUseCase = fetchMovieDetailsUseCase
+    self.movieService = movieService
   }
 
   func start(with detailType: DetailType) {
     let viewModel = DetailsViewModel(
       detailType: detailType,
-      fetchMovieDetailsUseCase: fetchMovieDetailsUseCase
+      fetchMovieDetailsUseCase: fetchMovieDetailsUseCase,
+      movieService: movieService
     )
     viewModel.coordinator = self
 

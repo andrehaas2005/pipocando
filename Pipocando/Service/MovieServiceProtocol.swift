@@ -12,4 +12,5 @@ public protocol MovieServiceProtocol {
   func fetchUpcomingMovies(completion: @escaping (Result<[Movie], Error>) -> Void)
   
   func fetchMovieDetails(_ movie_id: Int, completion: @escaping (Result<MovieDetails, Error>) -> Void)
+  func fetchWatchProviders(_ movieID: Int, completion: @escaping (Result<WatchProvidersResponse, Error>) -> Void)
 }
