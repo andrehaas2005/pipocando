@@ -9,13 +9,43 @@ import XCTest
 @MainActor
 final class CalendarViewModelTests: XCTestCase {
 
-  private final class CalendarRoutingSpy: CalendarRouting {}
+  private final class CalendarRoutingSpy: CalendarRouting {
+    var didShowSerie = false
 
-  private final class FetchTopRatedSeriesUseCaseSpy: FetchTopRatedSeriesUseCase {
-    var result: Result<[Serie], AppError> = .success([])
+    func showSerieDetails(_ serie: Serie) {
+      didShowSerie = true
+    }
+  }
 
-    func execute() async throws -> [Serie] {
-      try result.get()
+  private final class SerieServiceSpy: SerieServiceProtocol {
+    var result: Result<[Serie], Error> = .success([])
+
+    func fetchSerieTopReted(completion: @escaping (Result<[Serie], any Error>) -> Void) {
+      completion(result)
+    }
+
+    func fetchSerieOnTheAir(completion: @escaping (Result<[Serie], any Error>) -> Void) {
+      completion(result)
+    }
+
+    func fetchSeriePopular(completion: @escaping (Result<[Serie], any Error>) -> Void) {
+      completion(result)
+    }
+
+    func fetchSerieAiringToday(completion: @escaping (Result<[Serie], any Error>) -> Void) {
+      completion(result)
+    }
+
+    func fetchSeriesAiring(on date: String, completion: @escaping (Result<[Serie], any Error>) -> Void) {
+      completion(result)
+    }
+
+    func fetchLastWatchedSeriesEpisodes(completion: @escaping (Result<[Serie], Error>) -> Void) {
+      completion(result)
+    }
+
+    func fetchSerieDetails(completion: @escaping (Result<[Serie], Error>) -> Void) {
+      completion(result)
     }
   }
 
@@ -40,10 +70,11 @@ final class CalendarViewModelTests: XCTestCase {
 
   func testCalendarViewModelEmitsLoadedOnSuccess() async {
     let routing = CalendarRoutingSpy()
-    let useCase = FetchTopRatedSeriesUseCaseSpy()
-    useCase.result = .success([makeSerie(id: 7)])
+    let service = SerieServiceSpy()
+    service.result = .success([makeSerie(id: 7)])
 
-    let sut = CalendarViewModel(coordinator: routing, fetchTopRatedSeriesUseCase: useCase)
+    let sut = CalendarViewModel(coordinator: routing, serieService: service)
+    sut.didSelectDate(at: 2)
     await Task.yield()
 
     guard let state = sut.releases.value else {
@@ -60,10 +91,11 @@ final class CalendarViewModelTests: XCTestCase {
 
   func testCalendarViewModelEmitsErrorOnFailure() async {
     let routing = CalendarRoutingSpy()
-    let useCase = FetchTopRatedSeriesUseCaseSpy()
-    useCase.result = .failure(.network)
+    let service = SerieServiceSpy()
+    service.result = .failure(AppError.network)
 
-    let sut = CalendarViewModel(coordinator: routing, fetchTopRatedSeriesUseCase: useCase)
+    let sut = CalendarViewModel(coordinator: routing, serieService: service)
+    sut.didSelectDate(at: 2)
     await Task.yield()
 
     guard let state = sut.releases.value else {

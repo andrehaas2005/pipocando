@@ -45,6 +45,19 @@ class SerieService: SerieServiceProtocol {
       await self?.fetchWithAsync(request) { completion($0) }
     }
   }
+
+  func fetchSeriesAiring(on date: String, completion: @escaping (Result<[Serie], any Error>) -> Void) {
+    let request = APISerieRequest(
+      path: .discover,
+      paramenters: [
+        "first_air_date.gte": date,
+        "first_air_date.lte": date
+      ]
+    )
+    Task { [weak self] in
+      await self?.fetchWithAsync(request) { completion($0) }
+    }
+  }
   
   func fetchSerieDetails(completion: @escaping (Result<[Serie], any Error>) -> Void) {
     let request = APISerieRequest(path: .topRated)
