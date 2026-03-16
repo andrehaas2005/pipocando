@@ -48,6 +48,14 @@ final class MovieService: MovieServiceProtocol {
     }
   }
 
+
+  func fetchWatchProviders(_ movieID: Int, completion: @escaping (Result<WatchProvidersResponse, any Error>) -> Void) {
+    let request = APIMovieRequest(path: .watchProviders(movieID))
+    Task { [weak self] in
+      await self?.fetchWatchProvidersAsync(request) { completion($0) }
+    }
+  }
+
   func fetchNowPlayingMovies(completion: @escaping (Result<[Movie], any Error>) -> Void) {
     let request = APIMovieRequest(path: .nowPlaying)
     Task { [weak self] in
@@ -68,6 +76,15 @@ final class MovieService: MovieServiceProtocol {
   func fetchWithDetailsAsync(_ request: APIMovieRequest, completion: @escaping (Result<MovieDetails, any Error>) -> Void) async {
     do {
       let response: MovieDetails = try await service.request(request)
+      completion(.success(response))
+    } catch {
+      completion(.failure(error))
+    }
+  }
+
+  func fetchWatchProvidersAsync(_ request: APIMovieRequest, completion: @escaping (Result<WatchProvidersResponse, any Error>) -> Void) async {
+    do {
+      let response: WatchProvidersResponse = try await service.request(request)
       completion(.success(response))
     } catch {
       completion(.failure(error))

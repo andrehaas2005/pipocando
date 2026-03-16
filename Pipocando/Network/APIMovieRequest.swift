@@ -32,6 +32,8 @@ public struct APIMovieRequest {
       base["region"] = "BR"
     case .details:
       base["append_to_response"] = "videos,credits"
+    case .watchProviders:
+      base.removeValue(forKey: "page")
     }
     
     
@@ -43,7 +45,7 @@ public struct APIMovieRequest {
   
   private static func defaultMethod(for path: RouterMovie) -> HTTPMethod {
     switch path {
-    case .topRated, .nowPlaying, .popular, .upcoming, .details:
+    case .topRated, .nowPlaying, .popular, .upcoming, .details, .watchProviders:
       return .get
     }
   }

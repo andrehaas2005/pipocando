@@ -19,6 +19,7 @@ enum DetailsState {
 final class DetailsViewModel {
   let detailType: DetailType
   private let fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase
+  private let movieService: any MovieServiceProtocol
   private var fetchMovieTask: Task<Void, Never>?
   let title = Observable<String?>(nil)
   let description = Observable<String?>(nil)
@@ -37,10 +38,12 @@ final class DetailsViewModel {
 
   init(
     detailType: DetailType,
-    fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase
+    fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase,
+    movieService: any MovieServiceProtocol
   ) {
     self.detailType = detailType
     self.fetchMovieDetailsUseCase = fetchMovieDetailsUseCase
+    self.movieService = movieService
     setupDetails(for: detailType)
     setupMockContent()
   }
@@ -59,6 +62,7 @@ final class DetailsViewModel {
         screenState.value = .loaded(details)
         updateMetadata(details)
         cast.value = details.credits?.cast
+        fetchWatchProviders(movieID: movie.id)
       } catch {
         guard !Task.isCancelled else { return }
         screenState.value = .error(AppError.map(error))
@@ -66,6 +70,40 @@ final class DetailsViewModel {
     }
   }
 
+
+  private func fetchWatchProviders(movieID: Int) {
+    movieService.fetchWatchProviders(movieID) { [weak self] result in
+      guard let self else { return }
+      switch result {
+      case .success(let response):
+        let providersBR = response.results["BR"]
+        let merged = (providersBR?.flatrate ?? []) + (providersBR?.rent ?? []) + (providersBR?.buy ?? [])
+        let uniqueNames = Array(Set(merged.map(\.providerName))).sorted()
+        let mapped = uniqueNames.map { name in
+          (name: name, color: Self.colorHex(for: name))
+        }
+        DispatchQueue.main.async {
+          self.providers.value = mapped
+        }
+      case .failure:
+        break
+      }
+    }
+  }
+
+  private static func colorHex(for provider: String) -> String {
+    switch provider.lowercased() {
+    case "netflix": return "#E50914"
+    case "max", "hbo max": return "#002be7"
+    case "prime video", "amazon prime video": return "#00052d"
+    case "apple tv", "apple tv+": return "#f5f5f7"
+    case "disney plus", "disney+": return "#113CCF"
+    case "globoplay": return "#ff0055"
+    case "paramount plus", "paramount+": return "#0064ff"
+    case "cinema": return "#5A2EA6"
+    default: return "#3C3C3C"
+    }
+  }
 
   deinit {
     fetchMovieTask?.cancel()
@@ -116,7 +154,8 @@ final class DetailsViewModel {
       ("Netflix", "#E50914"),
       ("Max", "#002be7"),
       ("Prime Video", "#00052d"),
-      ("Apple TV", "#f5f5f7")
+      ("Apple TV", "#f5f5f7"),
+      ("Cinema", "#5A2EA6")
     ]
 
     trailerImageUrl.value = URL(string: "https://shre.ink/5mLr")

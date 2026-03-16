@@ -45,7 +45,8 @@ class HomeCoordinator: Coordinator {
   func showMovieDetails(_ movie: Movie) {
     let detailsCoordinator = DetailsCoordinator(
       navigationController: navigationController,
-      fetchMovieDetailsUseCase: dependencies.makeFetchMovieDetailsUseCase()
+      fetchMovieDetailsUseCase: dependencies.makeFetchMovieDetailsUseCase(),
+      movieService: dependencies.movieService
     )
     detailsCoordinator.parentCoordinator = self
     addChild(detailsCoordinator)
