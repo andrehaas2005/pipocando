@@ -22,6 +22,10 @@ public struct APISerieRequest {
     self.body = body
     self.paramenters = APISerieRequest.defaultParameters(for: path).merging(paramenters) { (_, new) in new }
   }
+
+  func with(page: Int) -> APISerieRequest {
+    APISerieRequest(path: path, body: body, paramenters: paramenters.merging(["page": String(page)]) { _, new in new })
+  }
   
   private static func defaultParameters(for path: RouterSerie) -> Parameters {
     var base: Parameters = [ "language": "pt-BR",
@@ -32,6 +36,8 @@ public struct APISerieRequest {
     
     case .popular, .topRated:
      break
+    case .discover:
+      base["sort_by"] = "popularity.desc"
     case .details:
       base["append_to_response"] = ""
     }
@@ -40,7 +46,7 @@ public struct APISerieRequest {
   
   private static func defaultMethod(for path: RouterSerie) -> HTTPMethod {
     switch path {
-    case .airingToday, .onTheAir, .popular, .topRated, .details:
+    case .airingToday, .onTheAir, .popular, .topRated, .discover, .details:
       return .get
     }
   }

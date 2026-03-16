@@ -14,6 +14,10 @@ class DetailsViewController: UIViewController {
   
   private let viewModel: DetailsViewModel
   private var detals: MovieDetails?
+  private var moviePreference: MoviePreference?
+  private var providerButtons: [String: UIButton] = [:]
+  private var movieIDForPreferences: Int?
+  private var movieTitleForPreferences: String?
   private let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
     scrollView.contentInsetAdjustmentBehavior = .never
@@ -75,12 +79,12 @@ class DetailsViewController: UIViewController {
       btn.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
     }
     btn.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-    btn.backgroundColor = .black
-    btn.layer.borderColor = Color.purple.withAlphaComponent(0.6).cgColor
+    btn.backgroundColor = UIColor.darkGray.withAlphaComponent(0.35)
+    btn.layer.borderColor = UIColor.gray.withAlphaComponent(0.55).cgColor
     btn.layer.borderWidth = 1
     btn.layer.cornerRadius = 12
-    btn.tintColor = Color.purple
-    btn.setTitleColor(.white, for: .normal)
+    btn.tintColor = UIColor.gray
+    btn.setTitleColor(UIColor.lightGray, for: .normal)
     return btn
   }()
   
@@ -191,6 +195,7 @@ class DetailsViewController: UIViewController {
     setupNavigation()
     updateSectionVisibility()
     updateButtonLayout()
+    setupActionHandlers()
   }
   
   override func viewDidLayoutSubviews() {
@@ -503,6 +508,134 @@ class DetailsViewController: UIViewController {
     }
   }
   
+
+  private func setupActionHandlers() {
+    favoriteButton.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
+    watchlistButton.addTarget(self, action: #selector(toggleWantToWatch), for: .touchUpInside)
+    watchedButton.addTarget(self, action: #selector(toggleWatched), for: .touchUpInside)
+  }
+
+  private func loadPreferencesIfPossible() {
+    guard let movieIDForPreferences, let movieTitleForPreferences else { return }
+    MoviePreferenceStore.shared.fetch(movieID: movieIDForPreferences, movieTitle: movieTitleForPreferences) { [weak self] preference in
+      DispatchQueue.main.async {
+        self?.moviePreference = preference
+        self?.renderPreferenceState()
+      }
+    }
+  }
+
+  private func persistPreference() {
+    guard let preference = moviePreference else { return }
+    MoviePreferenceStore.shared.save(preference)
+  }
+
+  private func renderPreferenceState() {
+    let favorite = moviePreference?.isFavorite ?? false
+    let wantToWatch = moviePreference?.wantToWatch ?? false
+    let watched = moviePreference?.isWatched ?? false
+
+    applySelectionStyle(for: favoriteButton, selected: favorite)
+    applySelectionStyle(for: watchlistButton, selected: wantToWatch)
+    applySelectionStyle(for: watchedButton, selected: watched)
+
+    providerButtons.forEach { provider, button in
+      let selected = moviePreference?.whereToWatch[provider] ?? false
+      applySelectionStyle(for: button, selected: selected, selectedTextColor: .white)
+    }
+  }
+
+  private func applySelectionStyle(for button: UIButton, selected: Bool, selectedTextColor: UIColor = .white) {
+    if selected {
+      button.backgroundColor = Color.purple.withAlphaComponent(0.22)
+      button.layer.borderColor = Color.purple.cgColor
+      button.tintColor = Color.purple
+      button.setTitleColor(selectedTextColor, for: .normal)
+    } else {
+      button.backgroundColor = UIColor.darkGray.withAlphaComponent(0.35)
+      button.layer.borderColor = UIColor.gray.withAlphaComponent(0.55).cgColor
+      button.tintColor = UIColor.gray
+      button.setTitleColor(UIColor.lightGray, for: .normal)
+    }
+  }
+
+  @objc
+  private func toggleFavorite() {
+    guard var preference = moviePreference else { return }
+    preference.isFavorite.toggle()
+    preference = MoviePreference(
+      movieID: preference.movieID,
+      movieTitle: preference.movieTitle,
+      isFavorite: preference.isFavorite,
+      wantToWatch: preference.wantToWatch,
+      isWatched: preference.isWatched,
+      whereToWatch: preference.whereToWatch,
+      userKey: preference.userKey,
+      updatedAt: Date().timeIntervalSince1970
+    )
+    moviePreference = preference
+    renderPreferenceState()
+    persistPreference()
+  }
+
+  @objc
+  private func toggleWantToWatch() {
+    guard var preference = moviePreference else { return }
+    preference.wantToWatch.toggle()
+    preference = MoviePreference(
+      movieID: preference.movieID,
+      movieTitle: preference.movieTitle,
+      isFavorite: preference.isFavorite,
+      wantToWatch: preference.wantToWatch,
+      isWatched: preference.isWatched,
+      whereToWatch: preference.whereToWatch,
+      userKey: preference.userKey,
+      updatedAt: Date().timeIntervalSince1970
+    )
+    moviePreference = preference
+    renderPreferenceState()
+    persistPreference()
+  }
+
+  @objc
+  private func toggleWatched() {
+    guard var preference = moviePreference else { return }
+    preference.isWatched.toggle()
+    preference = MoviePreference(
+      movieID: preference.movieID,
+      movieTitle: preference.movieTitle,
+      isFavorite: preference.isFavorite,
+      wantToWatch: preference.wantToWatch,
+      isWatched: preference.isWatched,
+      whereToWatch: preference.whereToWatch,
+      userKey: preference.userKey,
+      updatedAt: Date().timeIntervalSince1970
+    )
+    moviePreference = preference
+    renderPreferenceState()
+    persistPreference()
+  }
+
+  @objc
+  private func toggleProvider(_ sender: UIButton) {
+    guard let provider = sender.accessibilityIdentifier, var preference = moviePreference else { return }
+    var whereToWatch = preference.whereToWatch
+    whereToWatch[provider] = !(whereToWatch[provider] ?? false)
+    preference = MoviePreference(
+      movieID: preference.movieID,
+      movieTitle: preference.movieTitle,
+      isFavorite: preference.isFavorite,
+      wantToWatch: preference.wantToWatch,
+      isWatched: preference.isWatched,
+      whereToWatch: whereToWatch,
+      userKey: preference.userKey,
+      updatedAt: Date().timeIntervalSince1970
+    )
+    moviePreference = preference
+    renderPreferenceState()
+    persistPreference()
+  }
+
   private func setupBindings() {
     viewModel.title.bind { [weak self] text in
       
@@ -542,6 +675,9 @@ class DetailsViewController: UIViewController {
       switch state {
       case .loaded(let movieDetails):
         self?.detals = movieDetails
+        self?.movieIDForPreferences = movieDetails.id
+        self?.movieTitleForPreferences = movieDetails.title
+        self?.loadPreferencesIfPossible()
         self?.openYoutube()
       case .idle, .loading, .error:
         break
@@ -553,27 +689,33 @@ class DetailsViewController: UIViewController {
   
   private func updateProviders(_ providers: [(name: String, color: String)]) {
     providersStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-    let row1 = UIStackView()
-    row1.axis = .horizontal
-    row1.spacing = 12
-    row1.distribution = .fillEqually
-    for provider in providers.prefix(2) {
-      row1.addArrangedSubview(createProviderView(name: provider.name, color: UIColor(hex: provider.color)))
+    providerButtons.removeAll()
+
+    var normalized = providers
+    if !normalized.contains(where: { $0.name.lowercased() == "cinema" }) {
+      normalized.append(("Cinema", "#5A2EA6"))
     }
-    providersStackView.addArrangedSubview(row1)
-    
-    if providers.count > 2 {
-      let row2 = UIStackView()
-      row2.axis = .horizontal
-      row2.spacing = 12
-      row2.distribution = .fillEqually
-      for provider in providers.dropFirst(2).prefix(2) {
-        row2.addArrangedSubview(createProviderView(name: provider.name, color: UIColor(hex: provider.color)))
+
+    let chunks = stride(from: 0, to: normalized.count, by: 2).map {
+      Array(normalized[$0..<min($0 + 2, normalized.count)])
+    }
+
+    for chunk in chunks {
+      let row = UIStackView()
+      row.axis = .horizontal
+      row.spacing = 12
+      row.distribution = .fillEqually
+      chunk.forEach { provider in
+        let button = createProviderView(name: provider.name, color: UIColor(hex: provider.color))
+        providerButtons[provider.name] = button
+        row.addArrangedSubview(button)
       }
-      providersStackView.addArrangedSubview(row2)
+      providersStackView.addArrangedSubview(row)
     }
+
+    renderPreferenceState()
   }
-  
+
   private func updateEpisodes(_ episodes: [(code: String, title: String, desc: String)]) {
     episodesStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
     for ep in episodes {
@@ -644,11 +786,12 @@ class DetailsViewController: UIViewController {
       btn.setImage(UIImage(systemName: icon), for: .normal)
     }
     btn.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
-    btn.backgroundColor = .black
-    btn.layer.borderColor = Color.purple.withAlphaComponent(0.3).cgColor
+    btn.backgroundColor = UIColor.darkGray.withAlphaComponent(0.35)
+    btn.layer.borderColor = UIColor.gray.withAlphaComponent(0.55).cgColor
     btn.layer.borderWidth = 1
     btn.layer.cornerRadius = 12
-    btn.tintColor = Color.purple
+    btn.tintColor = UIColor.gray
+    btn.setTitleColor(UIColor.lightGray, for: .normal)
     return btn
   }
   
@@ -660,18 +803,18 @@ class DetailsViewController: UIViewController {
     return label
   }
   
-  private func createProviderView(name: String, color: UIColor) -> UIView {
-    let view = UIView()
-    view.backgroundColor = color
-    view.layer.cornerRadius = 12
-    let label = UILabel()
-    label.text = name
-    label.textColor = (color == .white || color == UIColor(hex: "#f5f5f7")) ? .black : .white
-    label.font = UIFont.systemFont(ofSize: 14, weight: .bold)
-    view.addSubview(label)
-    label.snp.makeConstraints { make in make.center.equalToSuperview() }
-    view.snp.makeConstraints { make in make.height.equalTo(48) }
-    return view
+  private func createProviderView(name: String, color: UIColor) -> UIButton {
+    let button = UIButton(type: .system)
+    button.setTitle(name, for: .normal)
+    button.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .bold)
+    button.layer.cornerRadius = 12
+    button.layer.borderWidth = 1
+    button.layer.borderColor = color.withAlphaComponent(0.8).cgColor
+    button.accessibilityIdentifier = name
+    button.addTarget(self, action: #selector(toggleProvider(_:)), for: .touchUpInside)
+    button.snp.makeConstraints { make in make.height.equalTo(48) }
+    applySelectionStyle(for: button, selected: false, selectedTextColor: .white)
+    return button
   }
 }
 

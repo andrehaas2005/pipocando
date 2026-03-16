@@ -23,6 +23,10 @@ public struct APIMovieRequest {
     self.body = body
     self.paramenters = APIMovieRequest.defaultParameters(for: path).merging(paramenters) { (_, new) in new }
   }
+
+  func with(page: Int) -> APIMovieRequest {
+    APIMovieRequest(path: path, body: body, paramenters: paramenters.merging(["page": String(page)]) { _, new in new })
+  }
   
   private static func defaultParameters(for path: RouterMovie) -> Parameters {
     var base: Parameters = [ "language": "pt-BR",
@@ -32,6 +36,8 @@ public struct APIMovieRequest {
       base["region"] = "BR"
     case .details:
       base["append_to_response"] = "videos,credits"
+    case .watchProviders:
+      base.removeValue(forKey: "page")
     }
     
     
@@ -43,7 +49,7 @@ public struct APIMovieRequest {
   
   private static func defaultMethod(for path: RouterMovie) -> HTTPMethod {
     switch path {
-    case .topRated, .nowPlaying, .popular, .upcoming, .details:
+    case .topRated, .nowPlaying, .popular, .upcoming, .details, .watchProviders:
       return .get
     }
   }

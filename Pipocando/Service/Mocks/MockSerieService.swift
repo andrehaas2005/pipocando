@@ -19,7 +19,11 @@ class MockSerieService: SerieServiceProtocol {
   }
   
   func fetchSerieAiringToday(completion: @escaping (Result<[Serie], any Error>) -> Void) {
-    
+
+  }
+
+  func fetchSeriesAiring(on date: String, completion: @escaping (Result<[Serie], any Error>) -> Void) {
+    completion(.success([]))
   }
   
   func fetchSerieDetails(completion: @escaping (Result<[Serie], any Error>) -> Void) {
