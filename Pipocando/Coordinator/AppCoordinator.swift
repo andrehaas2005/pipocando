@@ -82,7 +82,9 @@ class AppCoordinator: Coordinator {
     let calendarNavController = NavigationController()
     let calendarCoordinator = CalendarCoordinator(
       navigationController: calendarNavController,
-      fetchTopRatedSeriesUseCase: dependencies.makeFetchTopRatedSeriesUseCase()
+      serieService: dependencies.serieService,
+      fetchMovieDetailsUseCase: dependencies.makeFetchMovieDetailsUseCase(),
+      movieService: dependencies.movieService
     )
     addChild(calendarCoordinator)
     calendarCoordinator.start()

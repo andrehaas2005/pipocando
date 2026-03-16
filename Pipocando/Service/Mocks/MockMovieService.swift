@@ -15,6 +15,18 @@ class MockMovieService: MovieServiceProtocol {
     completion(.failure(NSError(domain: "MockMovieService", code: 404, userInfo: [NSLocalizedDescriptionKey: "Movie details mock not implemented."])))
   }
 
+
+  func fetchWatchProviders(_ movieID: Int, completion: @escaping (Result<WatchProvidersResponse, any Error>) -> Void) {
+    let payload = WatchProvidersResponse(results: [
+      "BR": CountryWatchProvider(
+        flatrate: [ProviderItem(providerName: "Netflix"), ProviderItem(providerName: "Max")],
+        rent: nil,
+        buy: nil
+      )
+    ])
+    completion(.success(payload))
+  }
+
   func fetchPopularMovies(completion: @escaping (Result<[Movie], any Error>) -> Void) {
     getMockData { [weak self] result in
       guard self != nil else { return }

@@ -32,6 +32,8 @@ public struct APISerieRequest {
     
     case .popular, .topRated:
      break
+    case .discover:
+      base["sort_by"] = "popularity.desc"
     case .details:
       base["append_to_response"] = ""
     }
@@ -40,7 +42,7 @@ public struct APISerieRequest {
   
   private static func defaultMethod(for path: RouterSerie) -> HTTPMethod {
     switch path {
-    case .airingToday, .onTheAir, .popular, .topRated, .details:
+    case .airingToday, .onTheAir, .popular, .topRated, .discover, .details:
       return .get
     }
   }

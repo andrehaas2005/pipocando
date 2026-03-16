@@ -10,22 +10,37 @@ import UIKit
 class CalendarCoordinator: Coordinator {
   var childCoordinators: [Coordinator] = []
   var navigationController: NavigationController
-  private let fetchTopRatedSeriesUseCase: any FetchTopRatedSeriesUseCase
+  private let serieService: any SerieServiceProtocol
+  private let fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase
+  private let movieService: any MovieServiceProtocol
 
   init(
     navigationController: NavigationController,
-    fetchTopRatedSeriesUseCase: any FetchTopRatedSeriesUseCase
+    serieService: any SerieServiceProtocol,
+    fetchMovieDetailsUseCase: any FetchMovieDetailsUseCase,
+    movieService: any MovieServiceProtocol
   ) {
     self.navigationController = navigationController
-    self.fetchTopRatedSeriesUseCase = fetchTopRatedSeriesUseCase
+    self.serieService = serieService
+    self.fetchMovieDetailsUseCase = fetchMovieDetailsUseCase
+    self.movieService = movieService
   }
 
   func start() {
-    let viewModel = CalendarViewModel(coordinator: self, fetchTopRatedSeriesUseCase: fetchTopRatedSeriesUseCase)
+    let viewModel = CalendarViewModel(coordinator: self, serieService: serieService)
     let viewController = CalendarViewController(viewModel: viewModel)
     navigationController.pushViewController(viewController, animated: true)
   }
 }
 
 
-extension CalendarCoordinator: CalendarRouting {}
+extension CalendarCoordinator: CalendarRouting {
+  func showSerieDetails(_ serie: Serie) {
+    let detailsCoordinator = DetailsCoordinator(
+      navigationController: navigationController,
+      fetchMovieDetailsUseCase: fetchMovieDetailsUseCase,
+      movieService: movieService
+    )
+    detailsCoordinator.start(with: .serie(serie))
+  }
+}

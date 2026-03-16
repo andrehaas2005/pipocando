@@ -12,6 +12,7 @@ public enum RouterMovie: Equatable {
   case popular
   case upcoming
   case details(Int)
+  case watchProviders(Int)
   
   func path() -> String {
     switch self {
@@ -25,7 +26,8 @@ public enum RouterMovie: Equatable {
       Configuration.Endpoints.Movies.upcoming
     case .details(let movie_id):
       Configuration.Endpoints.Movies.movie + "\(movie_id)"
+    case .watchProviders(let movie_id):
+      Configuration.Endpoints.Movies.movie + "\(movie_id)/watch/providers"
     }
   }
 }
-
