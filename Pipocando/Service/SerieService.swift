@@ -50,8 +50,8 @@ class SerieService: SerieServiceProtocol {
     let request = APISerieRequest(
       path: .discover,
       paramenters: [
-        "first_air_date.gte": date,
-        "first_air_date.lte": date
+        "air_date.gte": date,
+        "air_date.lte": date
       ]
     )
     Task { [weak self] in

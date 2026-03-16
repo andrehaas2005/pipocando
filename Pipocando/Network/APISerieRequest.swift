@@ -34,7 +34,6 @@ public struct APISerieRequest {
      break
     case .discover:
       base["sort_by"] = "popularity.desc"
-      base["with_original_language"] = "pt"
     case .details:
       base["append_to_response"] = ""
     }

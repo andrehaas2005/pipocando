@@ -19,6 +19,7 @@ final class CalendarViewModelTests: XCTestCase {
 
   private final class SerieServiceSpy: SerieServiceProtocol {
     var result: Result<[Serie], Error> = .success([])
+    var lastRequestedDate: String?
 
     func fetchSerieTopReted(completion: @escaping (Result<[Serie], any Error>) -> Void) {
       completion(result)
@@ -37,6 +38,7 @@ final class CalendarViewModelTests: XCTestCase {
     }
 
     func fetchSeriesAiring(on date: String, completion: @escaping (Result<[Serie], any Error>) -> Void) {
+      lastRequestedDate = date
       completion(result)
     }
 
@@ -87,6 +89,24 @@ final class CalendarViewModelTests: XCTestCase {
     default:
       XCTFail("Expected loaded state")
     }
+  }
+
+
+  func testCalendarViewModelRequestsSelectedDateUsingAirDateFilter() async {
+    let routing = CalendarRoutingSpy()
+    let service = SerieServiceSpy()
+    service.result = .success([makeSerie(id: 1)])
+
+    let sut = CalendarViewModel(coordinator: routing, serieService: service)
+    sut.didSelectDate(at: 2)
+    await Task.yield()
+
+    let expected = Calendar.current.startOfDay(for: Date())
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.dateFormat = "yyyy-MM-dd"
+
+    XCTAssertEqual(service.lastRequestedDate, formatter.string(from: expected))
   }
 
   func testCalendarViewModelEmitsErrorOnFailure() async {
