@@ -23,6 +23,10 @@ public struct APIMovieRequest {
     self.body = body
     self.paramenters = APIMovieRequest.defaultParameters(for: path).merging(paramenters) { (_, new) in new }
   }
+
+  func with(page: Int) -> APIMovieRequest {
+    APIMovieRequest(path: path, body: body, paramenters: paramenters.merging(["page": String(page)]) { _, new in new })
+  }
   
   private static func defaultParameters(for path: RouterMovie) -> Parameters {
     var base: Parameters = [ "language": "pt-BR",

@@ -66,11 +66,29 @@ final class MovieService: MovieServiceProtocol {
   //MARK: - Call With Async
   func fetchWithAsync(_ request: APIMovieRequest, completion: @escaping (Result<[Movie], any Error>) -> Void) async {
     do {
-      let response: Cover<Movie> = try await service.request(request)
+      let response: Cover<Movie> = try await fetchAllPages(request: request)
       completion(.success(response.results))
     } catch {
       completion(.failure(error))
     }
+  }
+
+  private func fetchAllPages(request: APIMovieRequest) async throws -> Cover<Movie> {
+    var page = 1
+    var allResults: [Movie] = []
+    var totalPages = 1
+    var totalResults = 0
+
+    repeat {
+      let pageRequest = request.with(page: page)
+      let response: Cover<Movie> = try await service.request(pageRequest)
+      allResults.append(contentsOf: response.results)
+      totalPages = response.totalPages
+      totalResults = response.totalResults
+      page += 1
+    } while page <= totalPages
+
+    return Cover(page: totalPages, results: allResults, totalPages: totalPages, totalResults: totalResults)
   }
 
   func fetchWithDetailsAsync(_ request: APIMovieRequest, completion: @escaping (Result<MovieDetails, any Error>) -> Void) async {

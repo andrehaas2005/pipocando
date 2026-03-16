@@ -22,6 +22,10 @@ public struct APISerieRequest {
     self.body = body
     self.paramenters = APISerieRequest.defaultParameters(for: path).merging(paramenters) { (_, new) in new }
   }
+
+  func with(page: Int) -> APISerieRequest {
+    APISerieRequest(path: path, body: body, paramenters: paramenters.merging(["page": String(page)]) { _, new in new })
+  }
   
   private static func defaultParameters(for path: RouterSerie) -> Parameters {
     var base: Parameters = [ "language": "pt-BR",

@@ -95,7 +95,7 @@ class CalendarViewController: UIViewController {
   private func setupUI() {
     view.addSubview(scrollView)
     scrollView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+      make.edges.equalTo(view.safeAreaLayoutGuide)
     }
 
     scrollView.addSubview(contentView)
@@ -159,7 +159,8 @@ class CalendarViewController: UIViewController {
     contentView.addSubview(timelineTableView)
     timelineTableView.snp.makeConstraints { make in
       make.top.equalTo(selectedDateLabel.snp.bottom).offset(24)
-      make.leading.trailing.bottom.equalToSuperview()
+      make.leading.trailing.equalToSuperview()
+      make.bottom.equalToSuperview().offset(-Spacing.xl)
       self.timelineTableViewHeightConstraint = make.height.equalTo(0).priority(.low).constraint
     }
   }
